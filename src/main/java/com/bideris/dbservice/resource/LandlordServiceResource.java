@@ -5,6 +5,7 @@ import com.bideris.dbservice.repository.ApartmentRepository;
 import com.bideris.dbservice.repository.LandlordRepository;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/rest/landlord")
 public class LandlordServiceResource {
@@ -18,7 +19,7 @@ public class LandlordServiceResource {
     }
 
     @GetMapping("/{username}")
-    public Landlord getQuotes(@PathVariable("username") final String username){
+    public Landlord getLandlord(@PathVariable("username") final String username){
 
         return getLandlordByLandlordName(username);
 
@@ -48,4 +49,7 @@ public class LandlordServiceResource {
 
         return getLandlordByLandlordName(username);
     }
+
+
+
 }

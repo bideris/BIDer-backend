@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/rest/apartment")
 public class ApartmentServiceResource {
@@ -21,14 +22,14 @@ public class ApartmentServiceResource {
     }
 
     @GetMapping("/{id}")
-    public Apartment getQuotes(@PathVariable("id") final Integer id){
+    public Apartment getApartment(@PathVariable("id") final Integer id){
 
         return getApartmentById(id);
 
     }
 
     @GetMapping("/all/{name}")
-    public List<Apartment> getQuotes(@PathVariable("name") final String name){
+    public List<Apartment> getApartments(@PathVariable("name") final String name){
 
         return getApartmentsByLandlordName(name);
 

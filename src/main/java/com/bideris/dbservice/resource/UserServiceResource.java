@@ -4,6 +4,7 @@ import com.bideris.dbservice.model.User;
 import com.bideris.dbservice.repository.UsersRepository;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/rest/user")
 public class UserServiceResource {
@@ -15,7 +16,7 @@ public class UserServiceResource {
     }
 
     @GetMapping("/{username}")
-    public User getQuotes(@PathVariable("username") final String username){
+    public User getUser(@PathVariable("username") final String username){
 
         return getUserByUserName(username);
 
@@ -42,6 +43,16 @@ public class UserServiceResource {
         usersRepository.delete(user);
 
         return getUserByUserName(username);
+    }
+
+
+
+    @PostMapping("/register")
+    public User register(@RequestBody final User user){
+
+        usersRepository.save(user);
+
+        return getUserByUserName(user.getUserName());
     }
 
 }
