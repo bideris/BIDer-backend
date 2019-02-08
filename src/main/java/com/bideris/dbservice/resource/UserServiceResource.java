@@ -23,7 +23,7 @@ public class UserServiceResource {
 
     private User getUserByUserName(@PathVariable("username") String username) {
 
-        return usersRepository.findByUserName(username);
+        return usersRepository.findUserByUserName(username);
 
     }
 
@@ -38,7 +38,7 @@ public class UserServiceResource {
     @PostMapping("/delete/{username}")
     public User delete(@PathVariable("username") final String username) {
 
-        User user = usersRepository.findByUserName(username);
+        User user = usersRepository.findUserByUserName(username);
         usersRepository.delete(user);
 
         return getUserByUserName(username);
