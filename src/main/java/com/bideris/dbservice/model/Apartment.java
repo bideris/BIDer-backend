@@ -1,11 +1,13 @@
 package com.bideris.dbservice.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import java.util.Date;
 
+@Data
 @Entity
 @Table(name = "apartments", catalog = "bideris")
 public class Apartment {
@@ -87,131 +89,5 @@ public class Apartment {
         this.duration = duration;
     }
 
-    public String getAbout() {
-        return about;
-    }
 
-    public void setAbout(String about) {
-        this.about = about;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getHouseNumber() {
-        return houseNumber;
-    }
-
-    public void setHouseNumber(String houseNumber) {
-        this.houseNumber = houseNumber;
-    }
-
-    public String getApartmentNumber() {
-        return apartmentNumber;
-    }
-
-    public void setApartmentNumber(String apartmentNumber) {
-        this.apartmentNumber = apartmentNumber;
-    }
-
-    public Double getArea() {
-        return area;
-    }
-
-    public void setArea(Double area) {
-        this.area = area;
-    }
-
-    public Double getRooms() {
-        return rooms;
-    }
-
-    public void setRooms(Double rooms) {
-        this.rooms = rooms;
-    }
-
-    public Double getFloor() {
-        return floor;
-    }
-
-    public void setFloor(Double floor) {
-        this.floor = floor;
-    }
-
-    public Double getFloorCount() {
-        return floorCount;
-    }
-
-    public void setFloorCount(Double floorCount) {
-        this.floorCount = floorCount;
-    }
-
-    public Integer getBuiltYear() {
-        return builtYear;
-    }
-
-    public void setBuiltYear(Integer builtYear) {
-        this.builtYear = builtYear;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Landlord getLandlord() {
-        return landlord;
-    }
-
-    public void setLandlord(Landlord landlord) {
-        this.landlord = landlord;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    public Integer getDuration() {
-        return duration;
-    }
-
-    public void setDuration(Integer duration) {
-        this.duration = duration;
-    }
 }

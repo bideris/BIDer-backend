@@ -2,10 +2,11 @@ package com.bideris.dbservice.model;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 import net.bytebuddy.dynamic.loading.InjectionClassLoader;
 
 import javax.persistence.*;
-
+@Data
 @Entity
 @Table(name = "landlords" ,catalog = "bideris")
 public class Landlord {
@@ -57,76 +58,6 @@ public class Landlord {
         this.apartmentCount = apartmentCount;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getAbout() {
-        return about;
-    }
-
-    public void setAbout(String about) {
-        this.about = about;
-    }
-
-    public Integer getBirthdate() {
-        return birthdate;
-    }
-
-    public void setBirthdate(Integer birthdate) {
-        this.birthdate = birthdate;
-    }
-
-    public Integer getApartmentCount() {
-        return apartmentCount;
-    }
-
-    public void setApartmentCount(Integer apartmentCount) {
-        this.apartmentCount = apartmentCount;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }
 
