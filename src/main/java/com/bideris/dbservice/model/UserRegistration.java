@@ -50,7 +50,7 @@ public class UserRegistration {
         User user = new User();
         user.setUserName(getUserName());
         user.setEmail(getEmail());
-        user.setPassword(passwordHashing.hashPassword(getPassword()));//ennnncoding
+        user.setPassword(passwordHashing.hashPassword(getPassword()));// temp
         user.setFirstName(getFirstName());
         user.setLastName(getLastName());
         user.setAbout(getAbout());

@@ -25,7 +25,6 @@ public class User {
     @Column(name = "password")
     private String password;
 
-
     @Column(name = "first_name")
     private String firstName;
 
@@ -39,10 +38,15 @@ public class User {
     @Column(name = "birthdate")
     private Date birthdate;
 
+    @Column(name = "apartment_count")
+    private Integer apartmentCount = 0;
 
+    @Column(name = "role")
+    private String role;
 
     public User() {
     }
+
 
     public User(String userName, String email, String password, String firstName, String lastName, String about, Date birthdate) {
         this.userName = userName;

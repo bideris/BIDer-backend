@@ -18,7 +18,7 @@ public class Apartment {
     private Integer id;
 
     @ManyToOne
-    private Landlord landlord;
+    private User user;
 
     @Column(name = "price")
     private double price;
@@ -71,8 +71,8 @@ public class Apartment {
     public Apartment() {
     }
 
-    public Apartment(Landlord landlord, double price, String name, String about, String country, String city, String houseNumber, String apartmentNumber, Double area, Double rooms, Double floor, Double floorCount, Integer builtYear, Date startDate, Integer duration) {
-        this.landlord = landlord;
+    public Apartment(User landlord, double price, String name, String about, String country, String city, String houseNumber, String apartmentNumber, Double area, Double rooms, Double floor, Double floorCount, Integer builtYear, Date startDate, Integer duration) {
+        this.user = landlord;
         this.price = price;
         this.name = name;
         this.about = about;

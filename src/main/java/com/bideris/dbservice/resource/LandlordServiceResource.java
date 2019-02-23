@@ -1,8 +1,9 @@
 package com.bideris.dbservice.resource;
 
-import com.bideris.dbservice.model.Landlord;
+import com.bideris.dbservice.helpers.Response;
+import com.bideris.dbservice.model.User;
 import com.bideris.dbservice.repository.ApartmentRepository;
-import com.bideris.dbservice.repository.LandlordRepository;
+import com.bideris.dbservice.repository.UsersRepository;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -10,44 +11,78 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/rest/landlord")
 public class LandlordServiceResource {
 
-    private LandlordRepository landlordRepository;
+    private UsersRepository usersRepository;
     private ApartmentRepository apartmentRepository;
+    private String role = "landlord";
 
-    public LandlordServiceResource(LandlordRepository landlordRepository, ApartmentRepository apartmentRepository) {
-        this.landlordRepository = landlordRepository;
+    public LandlordServiceResource(UsersRepository UsersRepository, ApartmentRepository apartmentRepository) {
+        this.usersRepository = UsersRepository;
         this.apartmentRepository = apartmentRepository;
     }
 
     @GetMapping("/{username}")
-    public Landlord getLandlord(@PathVariable("username") final String username){
-
-        return getLandlordByLandlordName(username);
+    public Response getLandlord(@PathVariable("username") final String username){
+        Response response = new Response();
+        User user = getLandlordByLandlordName(username);
+        if(user == null){
+            response.setStatus(404);
+            response.setStatusMessage("Landlord with this username not found");
+        }
+        else {
+            response.setUser(user);
+            response.setStatus(200);
+            response.setStatusMessage("OK");
+        }
+        return response;
 
     }
 
-    private Landlord getLandlordByLandlordName(@PathVariable("username") String username) {
+    private User getLandlordByLandlordName(String username) {
 
-        return landlordRepository.findLandlordByUserName(username);
+        return usersRepository.findUserByUserNameAndRole(username,role);
 
     }
 
     @PostMapping("/add")
-    public Landlord add(@RequestBody final Landlord landlord){
+    public Response add(@RequestBody final User landlord){
+        landlord.setRole(role);
+        Response response = new Response();
+        User user2 = getLandlordByLandlordName(landlord.getUserName());
+        if(user2 != null){
+            response.setStatus(500);
+            response.setStatusMessage("landlord with this username already exists ");
+            return response;
+        }else {
+            response.setUser(landlord);
+            response.setStatus(200);
+            response.setStatusMessage("OK");
+        }
+        usersRepository.save(landlord);
 
-        landlordRepository.save(landlord);
 
-        return getLandlordByLandlordName(landlord.getUserName());
+        return response;
     }
 
     @PostMapping("/delete/{username}")
-    public Landlord delete(@PathVariable("username") final String username) {
+    public Response delete(@PathVariable("username") final String username) {
 
+        Response response = new Response();
+        User landlord = usersRepository.findUserByUserNameAndRole(username,role);
 
-        Landlord landlord = landlordRepository.findLandlordByUserName(username);
-        apartmentRepository.deleteAll(apartmentRepository.findApartmentsByLandlord(landlord));
-        landlordRepository.delete(landlord);
+        if(landlord == null){
+            response.setStatus(404);
+            response.setStatusMessage("landlord Not Found");
+            return response;
+        }else {
+            response.setUser(getLandlordByLandlordName(username));
+            response.setStatus(200);
+            response.setStatusMessage("OK user deleted");
+        }
 
-        return getLandlordByLandlordName(username);
+        apartmentRepository.deleteAll(apartmentRepository.findApartmentsByUser(landlord));
+        usersRepository.delete(landlord);
+
+        return response;
     }
 
 

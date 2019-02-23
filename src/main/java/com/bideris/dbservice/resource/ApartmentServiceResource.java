@@ -1,11 +1,12 @@
 package com.bideris.dbservice.resource;
 
 import com.bideris.dbservice.model.Apartment;
-import com.bideris.dbservice.model.Landlord;
+import com.bideris.dbservice.model.User;
 import com.bideris.dbservice.repository.ApartmentRepository;
-import com.bideris.dbservice.repository.LandlordRepository;
+import com.bideris.dbservice.repository.UsersRepository;
 import org.springframework.web.bind.annotation.*;
 
+import javax.jws.soap.SOAPBinding;
 import java.util.List;
 
 @CrossOrigin
@@ -14,11 +15,12 @@ import java.util.List;
 public class ApartmentServiceResource {
 
     private ApartmentRepository apartmentRepository;
-    private LandlordRepository landlordRepository;
+    private UsersRepository usersRepository;
+    private String rolel = "landlord";
 
-    public ApartmentServiceResource(ApartmentRepository apartmentRepository, LandlordRepository landlordRepository) {
+    public ApartmentServiceResource(ApartmentRepository apartmentRepository, UsersRepository usersRepository) {
         this.apartmentRepository = apartmentRepository;
-        this.landlordRepository = landlordRepository;
+        this.usersRepository = usersRepository;
     }
 
     @GetMapping("/{id}")
@@ -35,9 +37,9 @@ public class ApartmentServiceResource {
 
     }
 
-    private List<Apartment> getApartmentsByLandlordName(@PathVariable("name") String name) {
+    private List<Apartment> getApartmentsByLandlordName(String name) {
 
-        return apartmentRepository.findApartmentsByLandlord(landlordRepository.findLandlordByUserName(name));
+        return apartmentRepository.findApartmentsByUser(usersRepository.findUserByUserNameAndRole(name,rolel));
 
     }
 
@@ -50,7 +52,10 @@ public class ApartmentServiceResource {
     @PostMapping("/add/{username}")
     public Apartment add(@RequestBody final Apartment apartment,@PathVariable("username") final String username){
 
-        apartment.setLandlord((landlordRepository.findLandlordByUserName(username)));
+        User user = usersRepository.findUserByUserName(username);
+        user.setApartmentCount(user.getApartmentCount() + 1);
+        apartment.setUser(user);
+
         apartmentRepository.save(apartment);
 
         return getApartmentById(apartment.getId());

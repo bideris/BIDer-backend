@@ -4,7 +4,7 @@ package com.bideris.dbservice.helpers;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-//sudu gaiva
+//sudu gaiva temp
 public class PasswordHashing {
 
 
