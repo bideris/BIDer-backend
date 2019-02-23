@@ -1,12 +1,15 @@
 package com.bideris.dbservice.resource;
 
+import com.bideris.dbservice.helpers.ResponseApartment;
+import com.bideris.dbservice.helpers.ResponseUser;
+import com.bideris.dbservice.helpers.StatusCodes;
 import com.bideris.dbservice.model.Apartment;
 import com.bideris.dbservice.model.User;
 import com.bideris.dbservice.repository.ApartmentRepository;
 import com.bideris.dbservice.repository.UsersRepository;
 import org.springframework.web.bind.annotation.*;
 
-import javax.jws.soap.SOAPBinding;
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin
@@ -17,6 +20,7 @@ public class ApartmentServiceResource {
     private ApartmentRepository apartmentRepository;
     private UsersRepository usersRepository;
     private String rolel = "landlord";
+    private StatusCodes statusCodes =new StatusCodes();
 
     public ApartmentServiceResource(ApartmentRepository apartmentRepository, UsersRepository usersRepository) {
         this.apartmentRepository = apartmentRepository;
@@ -24,16 +28,41 @@ public class ApartmentServiceResource {
     }
 
     @GetMapping("/{id}")
-    public Apartment getApartment(@PathVariable("id") final Integer id){
+    public ResponseApartment getApartment(@PathVariable("id") final Integer id){
+        ResponseApartment response = new ResponseApartment();
+        Apartment apartment = getApartmentById(id);
+        if(apartment != null){
+            response.setApartments(new ArrayList<Apartment>(){{
+                add(apartment);
+            }});
 
-        return getApartmentById(id);
+            response.setStatus(statusCodes.getStatuse(0));
+
+        }else
+        {
+            response.setStatus(statusCodes.getStatuse(10));
+        }
+        return response;
 
     }
 
     @GetMapping("/all/{name}")
-    public List<Apartment> getApartments(@PathVariable("name") final String name){
+    public ResponseApartment getApartments(@PathVariable("name") final String name){
 
-        return getApartmentsByLandlordName(name);
+
+        ResponseApartment response = new ResponseApartment();
+        List<Apartment> apartments = getApartmentsByLandlordName(name);
+        if(apartments != null){
+            response.setApartments(apartments);
+            response.setStatus(statusCodes.getStatuse(0));
+        }else
+        {
+            response.setStatus(statusCodes.getStatuse(12));
+        }
+
+
+
+        return response;
 
     }
 
@@ -50,23 +79,47 @@ public class ApartmentServiceResource {
     }
 
     @PostMapping("/add/{username}")
-    public Apartment add(@RequestBody final Apartment apartment,@PathVariable("username") final String username){
+    public ResponseApartment add(@RequestBody final Apartment apartment,@PathVariable("username") final String username){
+        ResponseApartment response = new ResponseApartment();
 
         User user = usersRepository.findUserByUserName(username);
-        user.setApartmentCount(user.getApartmentCount() + 1);
-        apartment.setUser(user);
+        if(user == null){
+            response.setStatus(statusCodes.getStatuse(15));
+            return response;
+        }else {
+            user.setApartmentCount(user.getApartmentCount() + 1);
+            apartment.setUser(user);
+            apartmentRepository.save(apartment);
+            response.setStatus(statusCodes.getStatuse(0));
 
-        apartmentRepository.save(apartment);
-
-        return getApartmentById(apartment.getId());
+            response.setApartments(new ArrayList<Apartment>(){{
+                addAll(getApartmentsByLandlordName(username) );
+            }});
+        }
+        return response;
     }
 
     @PostMapping("/delete/{id}")
-    public Apartment delete(@PathVariable("id") final Integer id) {
+    public ResponseApartment delete(@PathVariable("id") final Integer id) {
 
+
+        ResponseApartment response = new ResponseApartment();
         Apartment apartment = apartmentRepository.findApartmentById(id);
-        apartmentRepository.delete(apartment);
+        if(apartment == null){
+            response.setStatus(statusCodes.getStatuse(11));
 
-        return apartment;
+            return response;
+        }
+        User user = apartment.getUser();
+
+        user.setApartmentCount(user.getApartmentCount() - 1);
+        apartmentRepository.delete(apartment);
+        response.setStatus(statusCodes.getStatuse(0));
+
+        response.setApartments(new ArrayList<Apartment>(){{
+            addAll(getApartmentsByLandlordName(user.getUserName()) );
+        }});
+
+        return response;
     }
 }

@@ -4,8 +4,8 @@ import com.bideris.dbservice.model.User;
 import lombok.Data;
 
 @Data
-public class Response {
+public class ResponseUser {
     User user;
-    int status;
-    String statusMessage;
+    Status status;
 }
+
