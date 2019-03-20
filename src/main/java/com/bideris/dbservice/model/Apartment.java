@@ -56,7 +56,7 @@ public class Apartment {
 
     @JsonFormat(pattern="yyyy/MM/dd")
     @Column(name = "built_year")
-    private Integer builtYear;
+    private Date builtYear;
 
 
 
@@ -71,7 +71,7 @@ public class Apartment {
     public Apartment() {
     }
 
-    public Apartment(User landlord, double price, String name, String about, String country, String city, String houseNumber, String apartmentNumber, Double area, Double rooms, Double floor, Double floorCount, Integer builtYear, Date startDate, Integer duration) {
+    public Apartment(User landlord, double price, String name, String about, String country, String city, String houseNumber, String apartmentNumber, Double area, Double rooms, Double floor, Double floorCount, Date builtYear, Date startDate, Integer duration) {
         this.user = landlord;
         this.price = price;
         this.name = name;
