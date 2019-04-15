@@ -10,7 +10,7 @@ public class StatusCodes {
     new Status(0,"OK"),
 
     new Status(10,"Landlord with this username not found"),
-    new Status(11,"Apartment with this id not found"),
+    new Status(11,"Post with this id not found"),
     new Status(12,"Apartments for this user not found"),
     new Status(13,"User with this username not found"),
     new Status(14,"User with this email not found"),

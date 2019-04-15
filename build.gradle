@@ -18,6 +18,9 @@ group = 'com.bideris'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
+
+apply plugin: "war"
+
 repositories {
 	mavenCentral()
 }
@@ -29,4 +32,8 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	compileOnly 'org.projectlombok:lombok:1.18.6'
 	annotationProcessor 'org.projectlombok:lombok:1.18.6'
+	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+	compile 'org.springframework:spring-context-support'
+	compile 'javax.mail:mail:1.4.7'
 }
+

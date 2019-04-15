@@ -1,9 +1,8 @@
 package com.bideris.dbservice.resource;
 
 import com.bideris.dbservice.helpers.ResponseApartment;
-import com.bideris.dbservice.helpers.ResponseUser;
 import com.bideris.dbservice.helpers.StatusCodes;
-import com.bideris.dbservice.model.Apartment;
+import com.bideris.dbservice.model.Post;
 import com.bideris.dbservice.model.User;
 import com.bideris.dbservice.repository.ApartmentRepository;
 import com.bideris.dbservice.repository.UsersRepository;
@@ -30,10 +29,10 @@ public class ApartmentServiceResource {
     @GetMapping("/{id}")
     public ResponseApartment getApartment(@PathVariable("id") final Integer id){
         ResponseApartment response = new ResponseApartment();
-        Apartment apartment = getApartmentById(id);
-        if(apartment != null){
-            response.setApartments(new ArrayList<Apartment>(){{
-                add(apartment);
+        Post post = getApartmentById(id);
+        if(post != null){
+            response.setPosts(new ArrayList<Post>(){{
+                add(post);
             }});
 
             response.setStatus(statusCodes.getStatuse(0));
@@ -51,9 +50,9 @@ public class ApartmentServiceResource {
 
 
         ResponseApartment response = new ResponseApartment();
-        List<Apartment> apartments = getApartmentsByLandlordName(name);
-        if(apartments != null){
-            response.setApartments(apartments);
+        List<Post> posts = getApartmentsByLandlordName(name);
+        if(posts != null){
+            response.setPosts(posts);
             response.setStatus(statusCodes.getStatuse(0));
         }else
         {
@@ -66,20 +65,20 @@ public class ApartmentServiceResource {
 
     }
 
-    private List<Apartment> getApartmentsByLandlordName(String name) {
+    private List<Post> getApartmentsByLandlordName(String name) {
 
         return apartmentRepository.findApartmentsByUser(usersRepository.findUserByUserNameAndRole(name,rolel));
 
     }
 
-    private Apartment getApartmentById(@PathVariable("id") Integer id) {
+    private Post getApartmentById(@PathVariable("id") Integer id) {
 
         return apartmentRepository.findApartmentById(id);
 
     }
 
     @PostMapping("/add/{username}")
-    public ResponseApartment add(@RequestBody final Apartment apartment,@PathVariable("username") final String username){
+    public ResponseApartment add(@RequestBody final Post post, @PathVariable("username") final String username){
         ResponseApartment response = new ResponseApartment();
 
         User user = usersRepository.findUserByUserName(username);
@@ -88,11 +87,11 @@ public class ApartmentServiceResource {
             return response;
         }else {
             user.setApartmentCount(user.getApartmentCount() + 1);
-            apartment.setUser(user);
-            apartmentRepository.save(apartment);
+            post.setUser(user);
+            apartmentRepository.save(post);
             response.setStatus(statusCodes.getStatuse(0));
 
-            response.setApartments(new ArrayList<Apartment>(){{
+            response.setPosts(new ArrayList<Post>(){{
                 addAll(getApartmentsByLandlordName(username) );
             }});
         }
@@ -104,19 +103,19 @@ public class ApartmentServiceResource {
 
 
         ResponseApartment response = new ResponseApartment();
-        Apartment apartment = apartmentRepository.findApartmentById(id);
-        if(apartment == null){
+        Post post = apartmentRepository.findApartmentById(id);
+        if(post == null){
             response.setStatus(statusCodes.getStatuse(11));
 
             return response;
         }
-        User user = apartment.getUser();
+        User user = post.getUser();
 
         user.setApartmentCount(user.getApartmentCount() - 1);
-        apartmentRepository.delete(apartment);
+        apartmentRepository.delete(post);
         response.setStatus(statusCodes.getStatuse(0));
 
-        response.setApartments(new ArrayList<Apartment>(){{
+        response.setPosts(new ArrayList<Post>(){{
             addAll(getApartmentsByLandlordName(user.getUserName()) );
         }});
 

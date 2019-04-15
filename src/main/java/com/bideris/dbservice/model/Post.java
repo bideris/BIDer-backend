@@ -9,8 +9,8 @@ import java.util.Date;
 
 @Data
 @Entity
-@Table(name = "apartments", catalog = "bideris")
-public class Apartment {
+@Table(name = "posts", catalog = "bideris")
+public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -68,10 +68,10 @@ public class Apartment {
     private Integer duration;
 
 
-    public Apartment() {
+    public Post() {
     }
 
-    public Apartment(User landlord, double price, String name, String about, String country, String city, String houseNumber, String apartmentNumber, Double area, Double rooms, Double floor, Double floorCount, Date builtYear, Date startDate, Integer duration) {
+    public Post(User landlord, double price, String name, String about, String country, String city, String houseNumber, String apartmentNumber, Double area, Double rooms, Double floor, Double floorCount, Date builtYear, Date startDate, Integer duration) {
         this.user = landlord;
         this.price = price;
         this.name = name;
