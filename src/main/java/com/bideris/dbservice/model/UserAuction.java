@@ -1,30 +1,15 @@
 package com.bideris.dbservice.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Data
 @Entity
-//@Table(name = "bid", catalog = "bideris")
-public class Bid {
-
+public class UserAuction {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @Column(name = "sum")
-    private Double sum;
-
-    @JsonFormat(pattern="yyyy/MM/dd")
-    @Column(name = "data")
-    private Date data;
-
-    @Column(name = "accepted")
-    private boolean accepted;
 
     //User_fk
     @ManyToOne(fetch = FetchType.EAGER, optional = false,targetEntity = User.class)
@@ -34,7 +19,6 @@ public class Bid {
     @Column(name = "userFk", insertable = false, updatable = false)
     private Integer userFk;
 
-
     //Auction_fk
     @ManyToOne(fetch = FetchType.EAGER, optional = false,targetEntity = Auction.class)
     @JoinColumn(name="auctionFk")
@@ -42,5 +26,4 @@ public class Bid {
 
     @Column(name = "auctionFk", insertable = false, updatable = false)
     private Integer auctionFk;
-
 }

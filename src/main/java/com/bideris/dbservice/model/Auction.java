@@ -27,4 +27,7 @@ public class Auction {
     @Column(name = "status")
     private String status;
 
+    @OneToOne
+    private Post postFk;
+
 }

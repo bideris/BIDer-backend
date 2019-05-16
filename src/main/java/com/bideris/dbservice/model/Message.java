@@ -16,12 +16,6 @@ public class Message {
     @Column(name = "id")
     private Integer id;
 
-    @ManyToOne
-    private User user;
-
-    @ManyToOne
-    private Auction auction;
-
     //time
     @JsonFormat(pattern="yyyy/MM/dd")
     @Column(name = "date")
@@ -29,4 +23,22 @@ public class Message {
 
     @Column(name = "message")
     private String houseNumber;
+
+
+    //Auction_fk
+    @ManyToOne(fetch = FetchType.EAGER, optional = false,targetEntity = Auction.class)
+    @JoinColumn(name="auctionFk")
+    private Auction auction;
+
+    @Column(name = "auctionFk", insertable = false, updatable = false)
+    private Integer auctionFk;
+
+
+    //User_fk
+    @ManyToOne(fetch = FetchType.EAGER, optional = false,targetEntity = User.class)
+    @JoinColumn(name="userFk")
+    private User user;
+
+    @Column(name = "userFk", insertable = false, updatable = false)
+    private Integer userFk;
 }

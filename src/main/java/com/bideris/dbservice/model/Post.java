@@ -13,12 +13,17 @@ import java.util.Date;
 public class Post {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
-    @ManyToOne
+    //User_fk
+    @ManyToOne(fetch = FetchType.EAGER, optional = false,targetEntity = User.class)
+    @JoinColumn(name="userFk")
     private User user;
+
+    @Column(name = "userFk", insertable = false, updatable = false)
+    private Integer userFk;
 
     @Column(name = "price")
     private double price;
