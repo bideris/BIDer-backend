@@ -18,7 +18,7 @@ public class Review {
 
     String feedback;
 
-    @JsonFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date date;
 
 
@@ -30,7 +30,7 @@ public class Review {
     @Column(name = "userRFk", insertable = false, updatable = false)
     private Integer userRFk;
 
-    //User_fk (vertinamas)
+    //User_ffk (vertinamas)
     @ManyToOne(fetch = FetchType.EAGER, optional = false,targetEntity = User.class)
     @JoinColumn(name="userFFk")
     private User userF;

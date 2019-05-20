@@ -90,19 +90,19 @@ public class ApartmentServiceResource {
 
         User user = usersRepository.findUserByIdAndRole(landlordId,"landlord");
         if(user == null){
-            response.setStatus(statusCodes.getStatuse(15));
-            return response;
-        }else {
-            user.setApartmentCount(user.getApartmentCount() + 1);
-            post.setUser(user);
-            post.setUserFk(user.getId());
-            apartmentRepository.save(post);
-            response.setStatus(statusCodes.getStatuse(0));
-
-            response.setPosts(new ArrayList<Post>(){{
-                addAll(getApartmentsByLandlordId(landlordId) );
-            }});
+            user = usersRepository.findUserById(landlordId);
+            user.setRole("landlord");
         }
+        user.setApartmentCount(user.getApartmentCount() + 1);
+        post.setUser(user);
+        post.setUserFk(user.getId());
+        apartmentRepository.save(post);
+        response.setStatus(statusCodes.getStatuse(0));
+
+        response.setPosts(new ArrayList<Post>(){{
+            addAll(getApartmentsByLandlordId(landlordId) );
+        }});
+
         return response;
     }
 
