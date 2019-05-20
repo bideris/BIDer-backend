@@ -21,12 +21,20 @@ public class Auction {
 
     private String status;
 
-
+    //postFk
     @OneToOne(fetch = FetchType.EAGER, optional = false,targetEntity = Post.class)
     @JoinColumn(name="postFk")
     private Post post;
 
     @Column(name = "postFk", insertable = false, updatable = false)
     private Integer postFk;
+
+    //User_fk
+    @ManyToOne(fetch = FetchType.LAZY,targetEntity = User.class)
+    @JoinColumn(name="winnerFk")
+    private User winner;
+
+    @Column(name = "winnerFk", insertable = false, updatable = false)
+    private Integer winnerFk;
 
 }

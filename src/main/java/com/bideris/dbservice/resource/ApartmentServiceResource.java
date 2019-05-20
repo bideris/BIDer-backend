@@ -2,9 +2,11 @@ package com.bideris.dbservice.resource;
 
 import com.bideris.dbservice.helpers.ResponseApartment;
 import com.bideris.dbservice.helpers.StatusCodes;
+import com.bideris.dbservice.model.Auction;
 import com.bideris.dbservice.model.Post;
 import com.bideris.dbservice.model.User;
 import com.bideris.dbservice.repository.ApartmentRepository;
+import com.bideris.dbservice.repository.AuctionRepository;
 import com.bideris.dbservice.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +24,8 @@ public class ApartmentServiceResource {
     private ApartmentRepository apartmentRepository;
     @Autowired
     private UsersRepository usersRepository;
+    @Autowired
+    private AuctionRepository auctionRepository;
 
     private String rolel = "landlord";
     private StatusCodes statusCodes =new StatusCodes();
@@ -124,5 +128,26 @@ public class ApartmentServiceResource {
         }});
 
         return response;
+    }
+
+
+    @GetMapping("/winners/{landlordId}")
+    public List<User> getwinners(@PathVariable("landlordId") final Integer landlordId){
+
+
+        List<Post> posts = getApartmentsByLandlordId(landlordId);
+
+        List<User> users = new ArrayList<>();
+        Auction auction;
+        for (Post post: posts) {
+            if((auction = auctionRepository.findAuctionByPostFk(post.getId())) != null)
+                if(auction.getWinner() != null){
+                    users.add(auction.getWinner());
+                }
+
+        }
+
+        return users;
+
     }
 }

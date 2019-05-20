@@ -30,7 +30,7 @@ public class LandlordServiceResource {
     @GetMapping("/{id}")
     public ResponseUser getLandlord(@PathVariable("id") final Integer id){
         ResponseUser responseUser = new ResponseUser();
-        User user = getLandlordByLandlordName(id);
+        User user = getLandlordByLandlordId(id);
         if(user == null){
 
             responseUser.setStatus(statusCodes.getStatuse(10));
@@ -44,7 +44,7 @@ public class LandlordServiceResource {
 
     }
 
-    private User getLandlordByLandlordName(Integer landlordId) {
+    private User getLandlordByLandlordId(Integer landlordId) {
 
         return usersRepository.findUserByIdAndRole(landlordId,role);
 
@@ -54,7 +54,7 @@ public class LandlordServiceResource {
     public ResponseUser add(@RequestBody final User landlord){
         landlord.setRole(role);
         ResponseUser responseUser = new ResponseUser();
-        User user2 = getLandlordByLandlordName(landlord.getId());
+        User user2 = getLandlordByLandlordId(landlord.getId());
         if(user2 != null){
             responseUser.setStatus(statusCodes.getStatuse(20));
             return responseUser;
@@ -78,7 +78,7 @@ public class LandlordServiceResource {
             responseUser.setStatus(statusCodes.getStatuse(10));
             return responseUser;
         }else {
-            responseUser.setUser(getLandlordByLandlordName(landlordId));
+            responseUser.setUser(getLandlordByLandlordId(landlordId));
             responseUser.setStatus(statusCodes.getStatuse(0));
         }
 

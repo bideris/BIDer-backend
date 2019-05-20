@@ -11,4 +11,5 @@ public interface AuctionRepository extends JpaRepository<Auction,Integer> {
 
     Auction findAuctionByPostFk(Integer id);
 
+
 }
