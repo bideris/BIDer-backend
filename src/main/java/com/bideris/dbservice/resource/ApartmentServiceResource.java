@@ -52,6 +52,11 @@ public class ApartmentServiceResource {
 
     }
 
+    @GetMapping("/all")
+    public List<Post> allPosts(){
+        return apartmentRepository.findAll();
+    }
+
     @GetMapping("/all/{landlordId}")
     public ResponseApartment getApartments(@PathVariable("landlordId") final Integer landlordId){
 
