@@ -47,7 +47,7 @@ public class AuctionServiceResource {
         return auctionRepository.findAuctionByPostFk(id);
     }
 
-    @PostMapping("/all")
+    @GetMapping("/all")
     public List<Auction> getAllAuctions(){
 
         return auctionRepository.findAll();
