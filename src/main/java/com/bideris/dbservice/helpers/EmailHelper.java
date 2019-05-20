@@ -16,8 +16,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-@RestController
-@RequestMapping("/email")
+
 public class EmailHelper {
 
     @Autowired
@@ -43,9 +42,7 @@ public class EmailHelper {
 
     }
 
-
-    @PostMapping
-    public void SendNotification(@RequestBody Notification notification, BindingResult bindingResult) {
+    public void SendNotification(Notification notification, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             throw new ValidationException("Feedback is not valid");

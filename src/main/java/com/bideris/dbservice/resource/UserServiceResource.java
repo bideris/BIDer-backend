@@ -58,7 +58,7 @@ public class UserServiceResource {
 
     private User getUserByUserName(String username) {
 
-        return usersRepository.findUserByUserNameAndRole(username,role);
+        return usersRepository.findUserByUserName(username);
 
     }
 
