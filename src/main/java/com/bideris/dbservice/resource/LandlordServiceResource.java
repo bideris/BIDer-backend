@@ -2,12 +2,16 @@ package com.bideris.dbservice.resource;
 
 import com.bideris.dbservice.helpers.ResponseUser;
 import com.bideris.dbservice.helpers.StatusCodes;
+import com.bideris.dbservice.model.Auction;
+import com.bideris.dbservice.model.Post;
 import com.bideris.dbservice.model.User;
 import com.bideris.dbservice.repository.ApartmentRepository;
+import com.bideris.dbservice.repository.AuctionRepository;
 import com.bideris.dbservice.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin
@@ -19,6 +23,8 @@ public class LandlordServiceResource {
     private UsersRepository usersRepository;
     @Autowired
     private ApartmentRepository apartmentRepository;
+    @Autowired
+    private AuctionRepository auctionRepository;
 
     private String role = "landlord";
     private StatusCodes statusCodes = new StatusCodes();
@@ -88,10 +94,16 @@ public class LandlordServiceResource {
         return responseUser;
     }
 
-//    @PostMapping("/users/{id}")
-//    public List<User> getUserListByPost(){
-//
-//    }
+    @GetMapping("/deleteWinner/{auctionId}")
+    public int getwinners(@PathVariable("auctionId") final Integer auctionId){
+
+        Auction auction = auctionRepository.findAuctionById(auctionId);
+        auctionRepository.delete(auction);
+
+        return 0;
+
+
+    }
 
 
 }

@@ -132,17 +132,17 @@ public class ApartmentServiceResource {
 
 
     @GetMapping("/winners/{landlordId}")
-    public List<User> getwinners(@PathVariable("landlordId") final Integer landlordId){
+    public List<Auction> getwinners(@PathVariable("landlordId") final Integer landlordId){
 
 
         List<Post> posts = getApartmentsByLandlordId(landlordId);
 
-        List<User> users = new ArrayList<>();
+        List<Auction> users = new ArrayList<>();
         Auction auction;
         for (Post post: posts) {
             if((auction = auctionRepository.findAuctionByPostFk(post.getId())) != null)
                 if(auction.getWinner() != null){
-                    users.add(auction.getWinner());
+                    users.add(auction);
                 }
 
         }
