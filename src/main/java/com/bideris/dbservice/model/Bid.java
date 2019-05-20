@@ -16,7 +16,7 @@ public class Bid {
 
     private Double sum;
 
-    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date date;
 
     private boolean accepted;

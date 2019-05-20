@@ -24,7 +24,7 @@ public class UserRegistration {
     private String firstName;
     private String lastName;
     private String about;
-    @JsonFormat(pattern="yyyy/MM/dd")
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date birthdate;
 
     public UserRegistration() {

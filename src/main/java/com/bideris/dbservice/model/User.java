@@ -26,7 +26,7 @@ public class User {
 
     private String about;
 
-    @JsonFormat(pattern="yyyy/MM/dd")
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date birthdate;
 
     private Integer apartmentCount = 0;

@@ -14,7 +14,7 @@ public class Auction {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @JsonFormat(pattern="yyyy/MM/dd")
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date startDate;
 
     private Integer duration;

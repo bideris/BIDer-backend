@@ -16,7 +16,7 @@ public class Message {
     private Integer id;
 
     //time
-    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date date;
 
     private String text;

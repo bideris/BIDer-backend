@@ -18,7 +18,7 @@ public class Review {
 
     String feedback;
 
-    @JsonFormat(pattern="yyyy/MM/dd")
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date date;
 
 

@@ -47,12 +47,12 @@ public class Post {
 
     private Double floorCount;
 
-    @JsonFormat(pattern="yyyy/MM/dd")
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date builtYear;
 
 
 
-    @JsonFormat(pattern="yyyy/MM/dd")
+    @JsonFormat(pattern="yyyy-MM-dd")
     @Column(name = "start_date")
     private Date startDate;
 
