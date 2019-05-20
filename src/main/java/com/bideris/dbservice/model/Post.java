@@ -9,7 +9,6 @@ import java.util.Date;
 
 @Data
 @Entity
-@Table(name = "posts", catalog = "bideris")
 public class Post {
 
     @Id
@@ -17,7 +16,7 @@ public class Post {
     @Column(name = "id")
     private Integer id;
 
-    //User_fk
+    //Owner_fk
     @ManyToOne(fetch = FetchType.EAGER, optional = false,targetEntity = User.class)
     @JoinColumn(name="userFk")
     private User user;
@@ -25,42 +24,30 @@ public class Post {
     @Column(name = "userFk", insertable = false, updatable = false)
     private Integer userFk;
 
-    @Column(name = "price")
     private double price;
 
-    @Column(name = "name")
     private String name;
 
-    @Column(name = "about")
     private String about;
 
-    @Column(name = "country")
     private String country;
 
-    @Column(name = "city")
     private String city;
 
-    @Column(name = "house_number")
     private String houseNumber;
 
-    @Column(name = "apartment_number")
     private String apartmentNumber;
 
-    @Column(name = "area")
     private Double area;
 
-    @Column(name = "rooms")
     private Double rooms;
 
-    @Column(name = "floor")
     private Double floor;
 
 
-    @Column(name = "floor_count")
     private Double floorCount;
 
     @JsonFormat(pattern="yyyy/MM/dd")
-    @Column(name = "built_year")
     private Date builtYear;
 
 

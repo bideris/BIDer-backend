@@ -5,26 +5,32 @@ import com.bideris.dbservice.helpers.StatusCodes;
 import com.bideris.dbservice.model.User;
 import com.bideris.dbservice.repository.ApartmentRepository;
 import com.bideris.dbservice.repository.UsersRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/rest/landlord")
+@RequestMapping("/landlord")
 public class LandlordServiceResource {
 
+    @Autowired
     private UsersRepository usersRepository;
+    @Autowired
     private ApartmentRepository apartmentRepository;
+
     private String role = "landlord";
     private StatusCodes statusCodes = new StatusCodes();
-    public LandlordServiceResource(UsersRepository UsersRepository, ApartmentRepository apartmentRepository) {
-        this.usersRepository = UsersRepository;
-        this.apartmentRepository = apartmentRepository;
+
+    public LandlordServiceResource() {
+
     }
 
-    @GetMapping("/{username}")
-    public ResponseUser getLandlord(@PathVariable("username") final String username){
+    @GetMapping("/{id}")
+    public ResponseUser getLandlord(@PathVariable("id") final Integer id){
         ResponseUser responseUser = new ResponseUser();
-        User user = getLandlordByLandlordName(username);
+        User user = getLandlordByLandlordName(id);
         if(user == null){
 
             responseUser.setStatus(statusCodes.getStatuse(10));
@@ -38,9 +44,9 @@ public class LandlordServiceResource {
 
     }
 
-    private User getLandlordByLandlordName(String username) {
+    private User getLandlordByLandlordName(Integer landlordId) {
 
-        return usersRepository.findUserByUserNameAndRole(username,role);
+        return usersRepository.findUserByIdAndRole(landlordId,role);
 
     }
 
@@ -48,7 +54,7 @@ public class LandlordServiceResource {
     public ResponseUser add(@RequestBody final User landlord){
         landlord.setRole(role);
         ResponseUser responseUser = new ResponseUser();
-        User user2 = getLandlordByLandlordName(landlord.getUserName());
+        User user2 = getLandlordByLandlordName(landlord.getId());
         if(user2 != null){
             responseUser.setStatus(statusCodes.getStatuse(20));
             return responseUser;
@@ -62,17 +68,17 @@ public class LandlordServiceResource {
         return responseUser;
     }
 
-    @PostMapping("/delete/{username}")
-    public ResponseUser delete(@PathVariable("username") final String username) {
+    @PostMapping("/delete/{landlordId}")
+    public ResponseUser delete(@PathVariable("landlordId") final Integer landlordId) {
 
         ResponseUser responseUser = new ResponseUser();
-        User landlord = usersRepository.findUserByUserNameAndRole(username,role);
+        User landlord = usersRepository.findUserByIdAndRole(landlordId,role);
 
         if(landlord == null){
             responseUser.setStatus(statusCodes.getStatuse(10));
             return responseUser;
         }else {
-            responseUser.setUser(getLandlordByLandlordName(username));
+            responseUser.setUser(getLandlordByLandlordName(landlordId));
             responseUser.setStatus(statusCodes.getStatuse(0));
         }
 
@@ -82,6 +88,10 @@ public class LandlordServiceResource {
         return responseUser;
     }
 
+//    @PostMapping("/users/{id}")
+//    public List<User> getUserListByPost(){
+//
+//    }
 
 
 }

@@ -6,24 +6,27 @@ import com.bideris.dbservice.model.Post;
 import com.bideris.dbservice.model.User;
 import com.bideris.dbservice.repository.ApartmentRepository;
 import com.bideris.dbservice.repository.UsersRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/rest/apartment")
+@RequestMapping("/apartment")
 public class ApartmentServiceResource {
 
+    @Autowired
     private ApartmentRepository apartmentRepository;
+    @Autowired
     private UsersRepository usersRepository;
+
     private String rolel = "landlord";
     private StatusCodes statusCodes =new StatusCodes();
 
-    public ApartmentServiceResource(ApartmentRepository apartmentRepository, UsersRepository usersRepository) {
-        this.apartmentRepository = apartmentRepository;
-        this.usersRepository = usersRepository;
+    public ApartmentServiceResource() {
     }
 
     @GetMapping("/{id}")
@@ -45,12 +48,12 @@ public class ApartmentServiceResource {
 
     }
 
-    @GetMapping("/all/{name}")
-    public ResponseApartment getApartments(@PathVariable("name") final String name){
+    @GetMapping("/all/{landlordId}")
+    public ResponseApartment getApartments(@PathVariable("landlordId") final Integer landlordId){
 
 
         ResponseApartment response = new ResponseApartment();
-        List<Post> posts = getApartmentsByLandlordName(name);
+        List<Post> posts = getApartmentsByLandlordId(landlordId);
         if(posts != null){
             response.setPosts(posts);
             response.setStatus(statusCodes.getStatuse(0));
@@ -65,9 +68,9 @@ public class ApartmentServiceResource {
 
     }
 
-    private List<Post> getApartmentsByLandlordName(String name) {
+    private List<Post> getApartmentsByLandlordId(Integer id) {
 
-        return apartmentRepository.findApartmentsByUser(usersRepository.findUserByUserNameAndRole(name,rolel));
+        return apartmentRepository.findApartmentsByUser(usersRepository.findUserByIdAndRole(id,rolel));
 
     }
 
@@ -77,22 +80,23 @@ public class ApartmentServiceResource {
 
     }
 
-    @PostMapping("/add/{username}")
-    public ResponseApartment add(@RequestBody final Post post, @PathVariable("username") final String username){
+    @PostMapping("/add/{landlordId}")
+    public ResponseApartment add(@RequestBody final Post post, @PathVariable("landlordId") final Integer landlordId){
         ResponseApartment response = new ResponseApartment();
 
-        User user = usersRepository.findUserByUserName(username);
+        User user = usersRepository.findUserByIdAndRole(landlordId,"landlord");
         if(user == null){
             response.setStatus(statusCodes.getStatuse(15));
             return response;
         }else {
             user.setApartmentCount(user.getApartmentCount() + 1);
             post.setUser(user);
+            post.setUserFk(user.getId());
             apartmentRepository.save(post);
             response.setStatus(statusCodes.getStatuse(0));
 
             response.setPosts(new ArrayList<Post>(){{
-                addAll(getApartmentsByLandlordName(username) );
+                addAll(getApartmentsByLandlordId(landlordId) );
             }});
         }
         return response;
@@ -116,7 +120,7 @@ public class ApartmentServiceResource {
         response.setStatus(statusCodes.getStatuse(0));
 
         response.setPosts(new ArrayList<Post>(){{
-            addAll(getApartmentsByLandlordName(user.getUserName()) );
+            addAll(getApartmentsByLandlordId(user.getId()) );
         }});
 
         return response;

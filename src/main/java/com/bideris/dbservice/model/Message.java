@@ -9,7 +9,6 @@ import java.util.Date;
 
 @Data
 @Entity
-@Table(name = "posts", catalog = "bideris")
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,10 +17,8 @@ public class Message {
 
     //time
     @JsonFormat(pattern="yyyy/MM/dd")
-    @Column(name = "date")
     private Date date;
 
-    @Column(name = "message")
     private String houseNumber;
 
 

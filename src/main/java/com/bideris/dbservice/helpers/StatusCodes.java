@@ -25,6 +25,8 @@ public class StatusCodes {
     new Status(31,"Passwords did not mach"),
     new Status(32,"Bad email"),
 
+    new Status(40,"User already liked this post"),
+
     };
 
     public Status getStatuse(int id) {

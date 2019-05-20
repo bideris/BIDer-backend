@@ -1,29 +1,44 @@
 package com.bideris.dbservice.resource;
 
-import com.bideris.dbservice.helpers.PasswordHashing;
+
 import com.bideris.dbservice.helpers.ResponseUser;
 import com.bideris.dbservice.helpers.StatusCodes;
 import com.bideris.dbservice.helpers.Validation;
-import com.bideris.dbservice.model.User;
-import com.bideris.dbservice.model.UserRegistration;
+import com.bideris.dbservice.model.*;
+import com.bideris.dbservice.repository.ApartmentRepository;
+import com.bideris.dbservice.repository.AuctionRepository;
+import com.bideris.dbservice.repository.UserAuctionRepository;
 import com.bideris.dbservice.repository.UsersRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.jws.soap.SOAPBinding;
+import java.util.List;
+
 
 @Slf4j
 @CrossOrigin
 @RestController
-@RequestMapping("/rest/user")
+@RequestMapping("/user")
 public class UserServiceResource {
 
+    @Autowired
     private UsersRepository usersRepository;
+
+    @Autowired
+    private UserAuctionRepository userAuctionRepository;
+
+    @Autowired
+    private AuctionRepository auctionRepository;
+
+    @Autowired
+    private ApartmentRepository apartmentRepository;
+
     private Validation validation;
     private String role = "user";
     private StatusCodes statusCodes = new StatusCodes();
-    public UserServiceResource(UsersRepository usersRepository) {
-        this.usersRepository = usersRepository;
+
+    public UserServiceResource() {
         validation = new Validation(usersRepository);
     }
 
@@ -112,6 +127,43 @@ public class UserServiceResource {
 
     }
 
+    @PostMapping("/like/{userId}/{postId}")
+    public UserAuction LikePost(@PathVariable("userId") final Integer userId, @PathVariable("postId") final Integer postId){
+        User user = usersRepository.findUserById(userId);
+        Post post = apartmentRepository.findApartmentById(postId);
+        Auction auction = auctionRepository.findAuctionByPostFk(postId);
+        log.info("User - {} \n Post - {} \n Aucion - {}" ,user,post,auction);
+        if(auction == null ){
+            log.info("nėra auckijono");
+            auction = new Auction();
+            auction.setDuration(post.getDuration());
+            auction.setStartDate(post.getStartDate());
+            auction.setStatus("Pending");
+            auction.setPost(post);
+            auction.setPostFk(postId);
+            auctionRepository.save(auction);
+            log.info("New Auction - {}",auction);
+        }
 
+        UserAuction userAuction = new UserAuction();
+        if(userAuctionRepository.findUserAuctionByUserFkAndAuctionFk(userId,
+                auctionRepository.findAuctionByPostFk(postId).getId()) != null){
+            log.info("Useris jau dalyvauja aukcione");
+
+            return userAuction; // pakeisti i statusa
+
+        }else {
+
+            userAuction.setAuctionFk(auctionRepository.findAuctionByPostFk(postId).getId());
+            userAuction.setAuction(auction);
+            userAuction.setUser(user);
+            userAuction.setUserFk(userId);
+            userAuctionRepository.save(userAuction);
+        }
+
+
+    return userAuctionRepository.findUserAuctionsByAuctionFk(auction.getId());// pakeisti i statusa
+
+    }
 
 }

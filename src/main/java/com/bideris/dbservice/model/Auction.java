@@ -1,6 +1,5 @@
 package com.bideris.dbservice.model;
 
-import com.bideris.dbservice.helpers.Status;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
@@ -9,25 +8,25 @@ import java.util.Date;
 
 @Data
 @Entity
-@Table(name = "auction", catalog = "bideris")
 public class Auction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
     private Integer id;
 
     @JsonFormat(pattern="yyyy/MM/dd")
-    @Column(name = "start")
-    private Date builtYear;
+    private Date startDate;
 
-    @Column(name = "duration")
     private Integer duration;
 
-    @Column(name = "status")
     private String status;
 
-    @OneToOne
-    private Post postFk;
+
+    @OneToOne(fetch = FetchType.EAGER, optional = false,targetEntity = Post.class)
+    @JoinColumn(name="postFk")
+    private Post post;
+
+    @Column(name = "postFk", insertable = false, updatable = false)
+    private Integer postFk;
 
 }

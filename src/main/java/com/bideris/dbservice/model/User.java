@@ -8,40 +8,29 @@ import java.util.Date;
 
 @Data
 @Entity
-@Table(name = "users" ,catalog = "bideris")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
     private Integer id;
 
-    @Column(name = "user_name")
     private String userName;
 
-    @Column(name = "email")
     private String email;
 
-    @Column(name = "password")
     private String password;
 
-    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "Last_name")
     private String lastName;
 
-    @Column(name = "about")
     private String about;
 
     @JsonFormat(pattern="yyyy/MM/dd")
-    @Column(name = "birthdate")
     private Date birthdate;
 
-    @Column(name = "apartment_count")
     private Integer apartmentCount = 0;
 
-    @Column(name = "role")
     private String role;
 
     public User() {
