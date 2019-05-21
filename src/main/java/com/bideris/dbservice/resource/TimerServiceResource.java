@@ -49,10 +49,12 @@ public class TimerServiceResource {
                 for (UserAuction ua: userAuctions) {
                     if(a.getPostFk() == ua.getAuction().getPostFk()){
                         User u = ua.getUser();
-                        EmailHelper.Notification notification = new EmailHelper.Notification(u.getFirstName(),u.getEmail(),"aaaaaaaaaaaaaa","Prasidejo naujas auckionas");
+                        EmailHelper.Notification notification = new EmailHelper.Notification(u.getFirstName(),u.getEmail(),
+                                "buvo pradėtas naujas aukcijonas " +a.getPost().getName(),
+                                "Prasidejo naujas auckionas");
                         emailHelper.SendNotification(notification);
                     }
-            }
+                }
 
 
             }
@@ -76,6 +78,15 @@ public class TimerServiceResource {
             if (time + a.getDuration() < 1) {
                 log.info("Paktas statusa");
                 a.setStatus("Ended");
+                for (UserAuction ua: userAuctions) {
+                    if(a.getPostFk() == ua.getAuction().getPostFk()){
+                        User u = ua.getUser();
+                        EmailHelper.Notification notification = new EmailHelper.Notification(u.getFirstName(),u.getEmail(),
+                                "pas naujas aukcijonas " +a.getPost().getName(),
+                                "Prasidejo naujas auckionas");
+                        emailHelper.SendNotification(notification);
+                    }
+                }
                 auctionRepository.save(a);
             }
         }
