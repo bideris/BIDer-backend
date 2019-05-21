@@ -2,9 +2,11 @@ package com.bideris.dbservice.resource;
 
 import com.bideris.dbservice.helpers.EmailHelper;
 import com.bideris.dbservice.model.Auction;
+import com.bideris.dbservice.model.Bid;
 import com.bideris.dbservice.model.User;
 import com.bideris.dbservice.model.UserAuction;
 import com.bideris.dbservice.repository.AuctionRepository;
+import com.bideris.dbservice.repository.BidRepository;
 import com.bideris.dbservice.repository.UserAuctionRepository;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +34,8 @@ public class TimerServiceResource {
     @Autowired
     private UserAuctionRepository userAuctionRepository;
 
+    @Autowired
+    private BidRepository bidRepository;
 
     @Scheduled(cron = "0 */2 * * * *")
     public void beginAuctions(){
@@ -51,6 +55,7 @@ public class TimerServiceResource {
                 for (UserAuction ua: userAuctions) {
                     if(a.getPostFk() == ua.getAuction().getPostFk()){
                         User u = ua.getUser();
+
                         EmailHelper.Notification notification = new EmailHelper.Notification(u.getFirstName(),u.getEmail(),
                                 "buvo pradėtas naujas aukcionas " +a.getPost().getName(),
                                 "Prasidejo naujas auckionas");
@@ -79,7 +84,9 @@ public class TimerServiceResource {
 
             if (time + a.getDuration() < 1) {
                 log.info("Paktas statusa");
-                a.setStatus("Ended");
+                if(Setwinner(a)) {
+                    a.setStatus("Ended");
+                }
                 for (UserAuction ua: userAuctions) {
                     if(a.getPostFk() == ua.getAuction().getPostFk()){
                         User u = ua.getUser();
@@ -120,5 +127,23 @@ public class TimerServiceResource {
             }
             log.info("time {}",time);
         }
+    }
+
+    private boolean Setwinner(Auction Auction){
+        double max = 0.0;
+        Bid maxbid = null;
+        List<Bid> bids = bidRepository.findBidsByAuctionFk(Auction.getId());
+        for (Bid b: bids) {
+            if (max < b.getSum()) {
+                max = b.getSum();
+                maxbid = b;
+            }
+        }
+        if(maxbid != null) {
+            Auction.setWinner(maxbid.getUser());
+            Auction.setWinnerFk(maxbid.getUserFk());
+            return true;
+        }
+        return false;
     }
 }

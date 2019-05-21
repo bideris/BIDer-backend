@@ -69,11 +69,9 @@ public class AuctionServiceResource {
     @PostMapping("/accept/{userId}/{actionId}")
     public Auction Accept(@PathVariable("userId") final Integer userId, @PathVariable("actionId") final Integer actionId) {
         UserAuction userAuction = userAuctionRepository.findUserAuctionByUserFkAndAuctionFk(userId, actionId);
-        if (!userAuction.getAuction().getStatus().equals("Done") && userAuction.getAuction().getWinner() == null) {
+        if (userAuction.getAuction().getStatus().equals("Ended") && userAuction.getAuction().getWinner() == null) {
             log.info("pazymim");
             userAuction.getAuction().setStatus("Done");
-            userAuction.getAuction().setWinnerFk(userId);
-            userAuction.getAuction().setWinner(userAuction.getUser());
             auctionRepository.save(userAuction.getAuction());
         }
 
