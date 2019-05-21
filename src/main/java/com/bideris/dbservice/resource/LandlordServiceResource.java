@@ -2,14 +2,8 @@ package com.bideris.dbservice.resource;
 
 import com.bideris.dbservice.helpers.ResponseUser;
 import com.bideris.dbservice.helpers.StatusCodes;
-import com.bideris.dbservice.model.Auction;
-import com.bideris.dbservice.model.Post;
-import com.bideris.dbservice.model.Review;
-import com.bideris.dbservice.model.User;
-import com.bideris.dbservice.repository.ApartmentRepository;
-import com.bideris.dbservice.repository.AuctionRepository;
-import com.bideris.dbservice.repository.ReviewRepository;
-import com.bideris.dbservice.repository.UsersRepository;
+import com.bideris.dbservice.model.*;
+import com.bideris.dbservice.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +25,15 @@ public class LandlordServiceResource {
 
     @Autowired
     private ReviewRepository reviewRepository;
+
+    @Autowired
+    private UserAuctionRepository userAuctionRepository;
+
+    @Autowired
+    BidRepository bidRepository;
+
+    @Autowired
+    MessageRepository messageRepository;
 
     private String role = "landlord";
     private StatusCodes statusCodes = new StatusCodes();
@@ -104,6 +107,12 @@ public class LandlordServiceResource {
     public int getwinners(@PathVariable("auctionId") final Integer auctionId){
 
         Auction auction = auctionRepository.findAuctionById(auctionId);
+        userAuctionRepository.deleteAll(userAuctionRepository.findUserAuctionsByAuctionFk(auctionId));
+        bidRepository.deleteAll(bidRepository.findBidsByAuctionFk(auctionId));
+        messageRepository.deleteAll(messageRepository.findMessagesByAuctionFk(auctionId));
+        //bid
+        //message
+
         auctionRepository.delete(auction);
 
         return 0;
