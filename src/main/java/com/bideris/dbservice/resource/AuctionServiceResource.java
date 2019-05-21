@@ -56,7 +56,8 @@ public class AuctionServiceResource {
         List<UserAuction> userAuctions = userAuctionRepository.findUserAuctionsByUserFk(userId);
         List<Auction> auctions = new ArrayList<>();
         for (UserAuction userAuction : userAuctions) {
-            if (userAuction.getAuction().getStatus() != "Ended") {
+            if (!userAuction.getAuction().getStatus().equals("Ended")
+                    && !userAuction.getAuction().getStatus().equals("Done")  ) {
                 log.info("User Action - {}", userAuction);
                 auctions.add(userAuction.getAuction());
             }
@@ -69,7 +70,7 @@ public class AuctionServiceResource {
     @PostMapping("/accept/{userId}/{actionId}")
     public Auction Accept(@PathVariable("userId") final Integer userId, @PathVariable("actionId") final Integer actionId) {
         UserAuction userAuction = userAuctionRepository.findUserAuctionByUserFkAndAuctionFk(userId, actionId);
-        if (userAuction.getAuction().getStatus().equals("Ended") && userAuction.getAuction().getWinner() == null) {
+        if (userAuction.getAuction().getStatus().equals("Ended") && userAuction.getAuction().getWinner() != null) {
             log.info("pazymim");
             userAuction.getAuction().setStatus("Done");
             auctionRepository.save(userAuction.getAuction());
@@ -163,7 +164,8 @@ public class AuctionServiceResource {
         log.info("Users - {}",userAuctions);
         List<Auction> auctions = new ArrayList<>();
         for (UserAuction userAuction : userAuctions) {
-            if (userAuction.getAuction().getStatus().equals("Ended")) {
+            if (userAuction.getAuction().getStatus().equals("Done") ||
+                    userAuction.getAuction().getStatus().equals("Ended")) {
                 log.info("User Action - {}", userAuction);
                 auctions.add(userAuction.getAuction());
             }

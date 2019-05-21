@@ -82,7 +82,7 @@ public class TimerServiceResource {
             int time = (int)( (a.getStartDate().getTime() -now.getTime()  )  / (1000 * 60 * 60 * 24));
             log.info("iki aukciono {} \n pabaigos liko {}",a.getStartDate(), time + a.getDuration());
 
-            if (time + a.getDuration() <= 0) {
+            if (time + a.getDuration() <= 0 && !a.getStatus().equals("Done")) {
 
                 if(Setwinner(a)) {
                     log.info("STATUSA PAKEITE I ENDED IR PRIDEJO LAIMETOJA");
