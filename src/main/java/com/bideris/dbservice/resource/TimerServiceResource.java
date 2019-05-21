@@ -87,6 +87,7 @@ public class TimerServiceResource {
                 if(Setwinner(a)) {
                     log.info("STATUSA PAKEITE I ENDED IR PRIDEJO LAIMETOJA");
                     a.setStatus("Ended");
+                    auctionRepository.save(a);
                 }
                 for (UserAuction ua: userAuctions) {
                     if(a.getPostFk() == ua.getAuction().getPostFk()){
@@ -97,7 +98,7 @@ public class TimerServiceResource {
                         emailHelper.SendNotification(notification);
                     }
                 }
-                auctionRepository.save(a);
+
             }
         }
     }
