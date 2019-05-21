@@ -83,8 +83,9 @@ public class TimerServiceResource {
             log.info("iki aukciono {} \n pabaigos liko {}",a.getStartDate(), time + a.getDuration());
 
             if (time + a.getDuration() < 1) {
-                log.info("Paktas statusa");
+
                 if(Setwinner(a)) {
+                    log.info("STATUSA PAKEITE I ENDED IR PRIDEJO LAIMETOJA");
                     a.setStatus("Ended");
                 }
                 for (UserAuction ua: userAuctions) {
