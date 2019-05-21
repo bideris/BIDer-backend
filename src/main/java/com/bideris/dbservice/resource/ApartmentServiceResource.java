@@ -146,7 +146,7 @@ public class ApartmentServiceResource {
         Auction auction;
         for (Post post: posts) {
             if((auction = auctionRepository.findAuctionByPostFk(post.getId())) != null)
-                if(auction.getStatus().equals("Ended")){
+                if(auction.getStatus().equals("Done")){
                     users.add(auction);
                 }
 
