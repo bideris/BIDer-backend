@@ -11,7 +11,7 @@ public interface UserAuctionRepository extends JpaRepository<UserAuction,Integer
 
     List<UserAuction> findUserAuctionsByUserFk(Integer id);
 
-    UserAuction  findUserAuctionsByAuctionFk(Integer id);
+    UserAuction  findUserAuctionByAuctionFk(Integer id);
 
     UserAuction findUserAuctionByUserFkAndAuctionFk(Integer user, Integer auction);
 }

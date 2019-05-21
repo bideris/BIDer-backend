@@ -162,8 +162,9 @@ public class UserServiceResource {
         }
 
 
-    return userAuctionRepository.findUserAuctionsByAuctionFk(auction.getId());// pakeisti i statusa
+    return userAuction;// pakeisti i statusa
 
     }
+
 
 }

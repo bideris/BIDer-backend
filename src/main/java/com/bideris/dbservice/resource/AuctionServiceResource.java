@@ -145,6 +145,20 @@ public class AuctionServiceResource {
 
     }
 
+    @GetMapping("/won/{userId}")
+    public List<Auction> getDoneWonAuctionList(@PathVariable("userId") final Integer userId){
+        List<UserAuction> userAuctions = userAuctionRepository.findUserAuctionsByUserFk(userId);
+        List<Auction> auctions = new ArrayList<>();
+        for (UserAuction userAuction:userAuctions) {
+            log.info("User Action - {}",userAuction);
+            if(userAuction.getAuction().getWinnerFk() == userId)
+                auctions.add(userAuction.getAuction());
+        }
+
+        return auctions;
+
+    }
+
 
 
 }
