@@ -162,9 +162,10 @@ public class AuctionServiceResource {
     @GetMapping("/ended/{userId}")
     public List<Auction> getEndedAuctionList(@PathVariable("userId") final Integer userId) {
         List<UserAuction> userAuctions = userAuctionRepository.findUserAuctionsByUserFk(userId);
+        log.info("Users - {}",userAuctions);
         List<Auction> auctions = new ArrayList<>();
         for (UserAuction userAuction : userAuctions) {
-            if (userAuction.getAuction().getStatus() == "Ended") {
+            if (userAuction.getAuction().getStatus().equals("Ended")) {
                 log.info("User Action - {}", userAuction);
                 auctions.add(userAuction.getAuction());
             }
