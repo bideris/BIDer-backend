@@ -33,7 +33,7 @@ public class TimerServiceResource {
     private UserAuctionRepository userAuctionRepository;
 
 
-    //@Scheduled(cron = "5/10 * * * * *")
+    @Scheduled(cron = "0 */2 * * * *")
     public void beginAuctions(){
         log.info("Timeris kviečia beginAuctions");
         List<Auction> auctions = auctionRepository.findAll();
@@ -41,7 +41,7 @@ public class TimerServiceResource {
         Date now = new Date();
         for (Auction a: auctions) {
 
-            int time = (int)( (a.getStartDate().getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+            int time = (int)( (now.getTime() - a.getStartDate().getTime() ) / (1000 * 60 * 60 * 24));
             if(time < 1){
                 log.info("Pakeite statusa");
                 a.setStatus("Started");
@@ -63,7 +63,7 @@ public class TimerServiceResource {
 
     }
 //
-    //@Scheduled(cron = "5/10 * * * * *")
+    @Scheduled(cron = "0 */2 * * * *")
     public void endAuctions() {
         log.info("Timeris kviečia endAuctions");
 
@@ -72,7 +72,7 @@ public class TimerServiceResource {
         Date now = new Date();
         for (Auction a : auctions) {
 
-            int time = (int) ((a.getStartDate().getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+            int time = (int)( (now.getTime() - a.getStartDate().getTime() )  / (1000 * 60 * 60 * 24));
             log.info("Pakeite statusa - liko {}", time + a.getDuration());
 
             if (time + a.getDuration() < 1) {
@@ -92,7 +92,7 @@ public class TimerServiceResource {
         }
     }
 //
-    //@Scheduled(cron = "5/10 * * * * *")
+    @Scheduled(cron = "0 */5 * * * *")
     public void inform(){
         log.info("Timeris kviečia inform");
         List<Auction> auctions = auctionRepository.findAll();
@@ -102,14 +102,14 @@ public class TimerServiceResource {
         log.info(now.toString());
         for (Auction a: auctions) {
 
-            int time = (int)( (a.getStartDate().getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+            int time = (int)( (now.getTime() - a.getStartDate().getTime() )  / (1000 * 60 * 60 * 24));
             if(Math.abs(time) < 10){
                 for (UserAuction ua: userAuctions) {
                     if(a.getPostFk() == ua.getAuction().getPostFk()){
                         User u = ua.getUser();
                         EmailHelper.Notification notification = new EmailHelper.Notification(u.getFirstName(),u.getEmail(),
                                 "iki aukciono " +a.getPost().getName() + " pradžios liko " +time,
-                                "pasibaigė  aukcionas");
+                                "Informacija apie aukciono pradžia");
                         emailHelper.SendNotification(notification);
                     }
                 }
