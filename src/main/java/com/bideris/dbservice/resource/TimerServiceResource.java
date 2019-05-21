@@ -42,6 +42,7 @@ public class TimerServiceResource {
         for (Auction a: auctions) {
 
             int time = (int)( (now.getTime() - a.getStartDate().getTime() ) / (1000 * 60 * 60 * 24));
+            log.info("iki aukciojo {}  \n pradzios liko {}",a, time + a.getDuration());
             if(time < 1){
                 log.info("Pakeite statusa");
                 a.setStatus("Started");
@@ -73,7 +74,7 @@ public class TimerServiceResource {
         for (Auction a : auctions) {
 
             int time = (int)( (now.getTime() - a.getStartDate().getTime() )  / (1000 * 60 * 60 * 24));
-            log.info("Pakeite statusa - liko {}", time + a.getDuration());
+            log.info("iki aukciono {} \n pabaigos liko {}",a, time + a.getDuration());
 
             if (time + a.getDuration() < 1) {
                 log.info("Paktas statusa");
@@ -103,7 +104,9 @@ public class TimerServiceResource {
         for (Auction a: auctions) {
 
             int time = (int)( (now.getTime() - a.getStartDate().getTime() )  / (1000 * 60 * 60 * 24));
-            if(Math.abs(time) < 10){
+            log.info("iki aukciojo {} \n pradzios  liko {}", a.getStartDate() ,time );
+
+            if(time < 10){
                 for (UserAuction ua: userAuctions) {
                     if(a.getPostFk() == ua.getAuction().getPostFk()){
                         User u = ua.getUser();
