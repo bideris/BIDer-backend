@@ -1,6 +1,13 @@
 package com.bideris.dbservice;
 
+import com.bideris.dbservice.helpers.PasswordHashing;
+import com.bideris.dbservice.model.Auction;
+import com.bideris.dbservice.model.Post;
 import com.bideris.dbservice.model.User;
+import com.bideris.dbservice.model.UserAuction;
+import com.bideris.dbservice.repository.ApartmentRepository;
+import com.bideris.dbservice.repository.AuctionRepository;
+import com.bideris.dbservice.repository.UserAuctionRepository;
 import com.bideris.dbservice.repository.UsersRepository;
 import com.bideris.dbservice.resource.UserServiceResource;
 import org.hamcrest.Matchers;
@@ -36,6 +43,15 @@ public class UserServiceResourceTest {
 
     @Mock
     private UsersRepository usersRepository;
+
+    @Mock
+    private ApartmentRepository apartmentRepository;
+
+    @Mock
+    private AuctionRepository auctionRepository;
+
+    @Mock
+    private UserAuctionRepository userAuctionRepository;
 
     @Before
     public void setup() throws Exception{
@@ -140,15 +156,12 @@ public class UserServiceResourceTest {
 
     @Test
     public void login() throws Exception{
-        User test = new User("test","test","test","test","test","test", new Date(2000,1,1));
-        Mockito.when(usersRepository.findUserByUserName(test.getUserName())).thenReturn(null);
-
 
         String json ="{\n" +
-                "  \"userName\": \"test\",\n" +
-                "  \"email\": \"test@gamil.com\",\n" +
-                "  \"password\": \"tAAest123\",\n" +
-                "  \"password2\": \"tAAest123\",\n" +
+                "  \"userName\": \"aaa\",\n" +
+                "  \"email\": \"a@gamil.com\",\n" +
+                "  \"password\": \"tesT123123\",\n" +
+                "  \"password2\": \"tesT123123\",\n" +
                 "  \"firstName\": \"test\",\n" +
                 "  \"lastName\": \"test\",\n" +
                 "  \"about\": \"test\",\n" +
@@ -156,43 +169,83 @@ public class UserServiceResourceTest {
                 "}";
 
         MvcResult mvcResult = mockMvc.perform(
-                post("/user/register")
+                post("/user/login")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
 
         ).andExpect(status().isOk()).andReturn();
 
-        System.out.println(String.format("resultatas %s",mvcResult.getResponse().getContentAsString()));
+        User user = new User("test","test@gmail.com", PasswordHashing.hashPassword("tesT123123"),"test","test","test", new Date(2000,1,1));
+        user.setRole("user");
+        user.setId(1);
+
+        Mockito.when(usersRepository.findUserByUserNameOrEmailAndRole("test","test@gamil.com","user")).thenReturn(user);
+        String json2 ="{\n" +
+                "  \"userName\": \"test\",\n" +
+                "  \"email\": \"test@gamil.com\",\n" +
+                "  \"password\": \"tesT123123\",\n" +
+                "  \"password2\": \"tesT123123\",\n" +
+                "  \"firstName\": \"test\",\n" +
+                "  \"lastName\": \"test\",\n" +
+                "  \"about\": \"test\",\n" +
+                "  \"birthdate\": \"2000-01-01\"\n" +
+                "}";
+
+         mvcResult = mockMvc.perform(
+                post("/user/login")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json2)
+
+        ).andExpect(status().isOk()).andReturn();
+
 
     }
 
     @Test
-    public void LikePost(){
+    public void LikePost() throws Exception{
         User test = new User("test","test","test","test","test","test", new Date(2000,1,1));
         Mockito.when(usersRepository.findUserByUserName(test.getUserName())).thenReturn(null);
 
+        Date date = new Date();
 
-        String json ="{\n" +
-                "  \"userName\": \"test\",\n" +
-                "  \"email\": \"test@gamil.com\",\n" +
-                "  \"password\": \"tAAest123\",\n" +
-                "  \"password2\": \"tAAest123\",\n" +
-                "  \"firstName\": \"test\",\n" +
-                "  \"lastName\": \"test\",\n" +
-                "  \"about\": \"test\",\n" +
-                "  \"birthdate\": \"2000-01-01\"\n" +
-                "}";
+        Post post = new Post(
+                new User(), 111, "test","test", "test", "test", "test",
+                "test", 1.0, 1.0, 1.0, 1.0, date, date, 1
+        );
+        post.setId(1);
+
+        System.out.println("POST " + post.toString());
+
+        User user = new User("user","user","user","user","user","user", new Date(2000,1,1));
+        user.setId(2);
+        user.setRole("user");
+        Auction auction = new Auction(date, 3,"Done", post, 1,user , 1);
+        UserAuction ua = new UserAuction();
+        ua.setUserFk(1);ua.setUser(user);ua.setAuctionFk(1);ua.setAuction(auction);
+
+        Mockito.when(usersRepository.findUserById(1)).thenReturn(user);
+        Mockito.when(apartmentRepository.findApartmentById(1)).thenReturn(post);
+        Mockito.when(auctionRepository.findAuctionByPostFk(1)).thenReturn(auction);
+        Mockito.when(userAuctionRepository.findUserAuctionByUserFkAndAuctionFk(1,1)).thenReturn(ua);
 
         MvcResult mvcResult = mockMvc.perform(
-                post("/user/register")
+                post("/user/like/1/1")
                         .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json)
+
 
         ).andExpect(status().isOk()).andReturn();
 
-        System.out.println(String.format("resultatas %s",mvcResult.getResponse().getContentAsString()));
+        Mockito.when(auctionRepository.findAuctionByPostFk(1)).thenReturn(null);
+
+        mvcResult = mockMvc.perform(
+                post("/user/like/1/1")
+                        .accept(MediaType.APPLICATION_JSON)
+
+
+        ).andExpect(status().isOk()).andReturn();
+
 
     }
 }

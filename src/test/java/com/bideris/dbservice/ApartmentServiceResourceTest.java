@@ -65,7 +65,6 @@ public class ApartmentServiceResourceTest {
 
     @Test
     public void getApartment() throws  Exception{
-//        ResponseApartment response = new ResponseApartment();
 
         Date date = new Date();
 

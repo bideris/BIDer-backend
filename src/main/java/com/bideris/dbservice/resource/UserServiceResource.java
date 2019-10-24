@@ -121,7 +121,6 @@ public class UserServiceResource {
     public ResponseUser login(@RequestBody final User user){
 
        Validation validation = new Validation(usersRepository);
-
         ResponseUser responseUser = validation.valid(user);
         if(responseUser.getStatus().getStatus() == 0) {
             return responseUser;
@@ -134,6 +133,7 @@ public class UserServiceResource {
     public UserAuction LikePost(@PathVariable("userId") final Integer userId, @PathVariable("postId") final Integer postId){
         User user = usersRepository.findUserById(userId);
         Post post = apartmentRepository.findApartmentById(postId);
+        UserAuction userAuction = new UserAuction();
         Auction auction = auctionRepository.findAuctionByPostFk(postId);
         log.info("User - {} \n Post - {} \n Aucion - {}" ,user,post,auction);
         if(auction == null ){
@@ -147,9 +147,7 @@ public class UserServiceResource {
             auctionRepository.save(auction);
             log.info("New Auction - {}",auction);
         }
-
-        UserAuction userAuction = new UserAuction();
-        if(userAuctionRepository.findUserAuctionByUserFkAndAuctionFk(userId,
+        else if(userAuctionRepository.findUserAuctionByUserFkAndAuctionFk(userId,
                 auctionRepository.findAuctionByPostFk(postId).getId()) != null){
             log.info("Useris jau dalyvauja aukcione");
 
