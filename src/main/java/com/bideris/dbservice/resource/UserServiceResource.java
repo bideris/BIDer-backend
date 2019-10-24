@@ -34,12 +34,13 @@ public class UserServiceResource {
     @Autowired
     private ApartmentRepository apartmentRepository;
 
-    private Validation validation;
+
     private String role = "user";
     private StatusCodes statusCodes = new StatusCodes();
 
-    public UserServiceResource() {
-        validation = new Validation(usersRepository);
+    @GetMapping
+    public List<?> getAllusers(){
+        return usersRepository.findAll();
     }
 
     @GetMapping("/{username}")
@@ -100,6 +101,7 @@ public class UserServiceResource {
 
     @PostMapping("/register")
     public ResponseUser register(@RequestBody final UserRegistration user){
+       Validation validation = new Validation(usersRepository);
 
         ResponseUser responseUser = validation.valid(user);
 
@@ -118,7 +120,9 @@ public class UserServiceResource {
     @PostMapping("/login")
     public ResponseUser login(@RequestBody final User user){
 
-        ResponseUser responseUser = this.validation.valid(user);
+       Validation validation = new Validation(usersRepository);
+
+        ResponseUser responseUser = validation.valid(user);
         if(responseUser.getStatus().getStatus() == 0) {
             //saugoti sesija? daryti dalykus
             return responseUser;

@@ -56,6 +56,7 @@ public class AuctionServiceResource {
         List<UserAuction> userAuctions = userAuctionRepository.findUserAuctionsByUserFk(userId);
         List<Auction> auctions = new ArrayList<>();
         for (UserAuction userAuction : userAuctions) {
+            System.out.println("IDDD " + userAuction.getAuction().getStatus());
             if (!userAuction.getAuction().getStatus().equals("Ended")
                     && !userAuction.getAuction().getStatus().equals("Done")  ) {
                 log.info("User Action - {}", userAuction);
@@ -70,6 +71,7 @@ public class AuctionServiceResource {
     @PostMapping("/accept/{userId}/{actionId}")
     public Auction Accept(@PathVariable("userId") final Integer userId, @PathVariable("actionId") final Integer actionId) {
         UserAuction userAuction = userAuctionRepository.findUserAuctionByUserFkAndAuctionFk(userId, actionId);
+        log.debug("USER AUCTION {}",userAuction);
         if (userAuction.getAuction().getStatus().equals("Ended") && userAuction.getAuction().getWinner() != null) {
             log.info("pazymim");
             userAuction.getAuction().setStatus("Done");
@@ -107,7 +109,6 @@ public class AuctionServiceResource {
     }
 
     public Boolean validateMessage(Message message) {
-
         return true;
     }
 

@@ -37,4 +37,16 @@ public class Auction {
     @Column(name = "winnerFk", insertable = false, updatable = false)
     private Integer winnerFk;
 
+    public Auction() {
+    }
+
+    public Auction(Date startDate, Integer duration, String status, Post post, Integer postFk, User winner, Integer winnerFk) {
+        this.startDate = startDate;
+        this.duration = duration;
+        this.status = status;
+        this.post = post;
+        this.postFk = postFk;
+        this.winner = winner;
+        this.winnerFk = winnerFk;
+    }
 }

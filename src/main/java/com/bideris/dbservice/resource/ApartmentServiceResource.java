@@ -8,13 +8,14 @@ import com.bideris.dbservice.model.User;
 import com.bideris.dbservice.repository.ApartmentRepository;
 import com.bideris.dbservice.repository.AuctionRepository;
 import com.bideris.dbservice.repository.UsersRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.List;
-
+@Slf4j
 @CrossOrigin
 @RestController
 @RequestMapping("/apartment")
@@ -35,6 +36,7 @@ public class ApartmentServiceResource {
 
     @GetMapping("/{id}")
     public ResponseApartment getApartment(@PathVariable("id") final Integer id){
+        System.out.println("KVIETEEEE" + id.toString());
         ResponseApartment response = new ResponseApartment();
         Post post = getApartmentById(id);
         if(post != null){
@@ -68,6 +70,7 @@ public class ApartmentServiceResource {
             response.setStatus(statusCodes.getStatuse(0));
         }else
         {
+            System.out.println("Nu gi null");
             response.setStatus(statusCodes.getStatuse(12));
         }
 
@@ -78,15 +81,11 @@ public class ApartmentServiceResource {
     }
 
     private List<Post> getApartmentsByLandlordId(Integer id) {
-
         return apartmentRepository.findApartmentsByUser(usersRepository.findUserByIdAndRole(id,rolel));
-
     }
 
     private Post getApartmentById(@PathVariable("id") Integer id) {
-
         return apartmentRepository.findApartmentById(id);
-
     }
 
     @PostMapping("/add/{landlordId}")
@@ -94,6 +93,7 @@ public class ApartmentServiceResource {
         ResponseApartment response = new ResponseApartment();
 
         User user = usersRepository.findUserByIdAndRole(landlordId,"landlord");
+
         if(user == null){
             user = usersRepository.findUserById(landlordId);
             user.setRole("landlord");
@@ -103,15 +103,13 @@ public class ApartmentServiceResource {
         post.setUserFk(user.getId());
         apartmentRepository.save(post);
         response.setStatus(statusCodes.getStatuse(0));
-
         response.setPosts(new ArrayList<Post>(){{
             addAll(getApartmentsByLandlordId(landlordId) );
         }});
-
         return response;
     }
 
-    @PostMapping("/delete/{id}")
+    @GetMapping("/delete/{id}")
     public ResponseApartment delete(@PathVariable("id") final Integer id) {
 
 
@@ -127,7 +125,6 @@ public class ApartmentServiceResource {
         user.setApartmentCount(user.getApartmentCount() - 1);
         apartmentRepository.delete(post);
         response.setStatus(statusCodes.getStatuse(0));
-
         response.setPosts(new ArrayList<Post>(){{
             addAll(getApartmentsByLandlordId(user.getId()) );
         }});

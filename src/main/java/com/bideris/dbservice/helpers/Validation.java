@@ -4,11 +4,13 @@ import com.bideris.dbservice.model.User;
 import com.bideris.dbservice.model.UserRegistration;
 import com.bideris.dbservice.repository.UsersRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Slf4j
 public class Validation {
 
     private UsersRepository usersRepository;
+
     private String role = "user";
     private StatusCodes statusCodes = new StatusCodes();
     public Validation(UsersRepository usersRepository) {
@@ -19,6 +21,7 @@ public class Validation {
     public ResponseUser valid(UserRegistration user){
         String emailRegex = "^((\"[\\w-\\s]+\")|([\\w-]+(?:\\.[\\w-]+)*)|(\"[\\w-\\s]+\")([\\w-]+(?:\\.[\\w-]+)*))(@((?:[\\w-]+\\.)*\\w[\\w-]{0,66})\\.([a-z]{2,6}(?:\\.[a-z]{2})?)$)|(@\\[?((25[0-5]\\.|2[0-4][0-9]\\.|1[0-9]{2}\\.|[0-9]{1,2}\\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\\]?$)";
         ResponseUser responseUser = new ResponseUser();
+
         if(usersRepository.findUserByUserNameAndRole(user.getUserName(),role) != null) {
             log.warn(user.getUserName() + " Username already exists");
             responseUser.setStatus(statusCodes.getStatuse(21));

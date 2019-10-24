@@ -44,8 +44,10 @@ public class LandlordServiceResource {
 
     @GetMapping("/{id}")
     public ResponseUser getLandlord(@PathVariable("id") final Integer id){
+        System.out.println("aaaa");
         ResponseUser responseUser = new ResponseUser();
         User user = getLandlordByLandlordId(id);
+        System.out.println("USER "+ user);
         if(user == null){
 
             responseUser.setStatus(statusCodes.getStatuse(10));
@@ -123,12 +125,15 @@ public class LandlordServiceResource {
     private List<Review> writeReview(@PathVariable("ownerId") final Integer ownerId,
                                @PathVariable("userid") final Integer userid,
                                @RequestBody final Review review){
+        System.out.println("startedd");
         review.setUserFFk(ownerId);//vettintojas
         review.setUserRFk(userid);
         review.setUserF(usersRepository.findUserById(ownerId));
         review.setUserR(usersRepository.findUserById(userid));
         review.setDate(new Date());
+
         reviewRepository.save(review);
+        System.out.println("ended");
         return reviewRepository.findReviewsByUserRFk(userid);
     }
 
