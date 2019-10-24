@@ -135,7 +135,7 @@ public class LandlordServiceResourceTest {
     }
 
     @Test
-    public void getwinners() throws Exception{
+    public void writeReview() throws Exception{
 
         User owner = new User("owner","owner","owner","owner","owner","owner", new Date(2000,1,1));
         User user = new User("user","user","user","user","user","user", new Date(2000,1,1));
@@ -164,5 +164,30 @@ public class LandlordServiceResourceTest {
         ).andExpect(status().isOk()).andReturn();
 
 
+    }
+
+    @Test
+    public void deleteWinner() throws Exception{
+        User user = new User("test","test","test","test","test","test", new Date(2000,1,1));
+
+        Date date = new Date();
+        Post post = new Post(
+                new User(), 111, "test","test", "test", "test", "test",
+                "test", 1.0, 1.0, 1.0, 1.0, date, date, 1
+        );
+        post.setId(1);
+
+        user.setRole(role);
+        user.setId(1);
+        Auction auction = new Auction(date, 3,"Done", post, 1,user , 1);
+
+        Mockito.when(auctionRepository.findAuctionByPostFk((1))).thenReturn(auction);
+
+
+        MvcResult mvcResult = mockMvc.perform(
+                get("/landlord/deleteWinner/1")
+                        .accept(MediaType.APPLICATION_JSON)
+
+        ).andExpect(status().isOk()).andReturn();
     }
 }

@@ -2,9 +2,11 @@ package com.bideris.dbservice;
 
 import com.bideris.dbservice.helpers.ResponseApartment;
 import com.bideris.dbservice.helpers.StatusCodes;
+import com.bideris.dbservice.model.Auction;
 import com.bideris.dbservice.model.Post;
 import com.bideris.dbservice.model.User;
 import com.bideris.dbservice.repository.ApartmentRepository;
+import com.bideris.dbservice.repository.AuctionRepository;
 import com.bideris.dbservice.repository.UsersRepository;
 import com.bideris.dbservice.resource.ApartmentServiceResource;
 import org.junit.Before;
@@ -48,6 +50,9 @@ public class ApartmentServiceResourceTest {
 
     @Mock
     private ApartmentRepository apartmentRepository;
+
+    @Mock
+    private AuctionRepository auctionRepository;
 
     @MockBean
     private ApartmentServiceResource apartmentServiceResourceMB;
@@ -226,13 +231,33 @@ public class ApartmentServiceResourceTest {
         post.setId(1);
         posts.add(post);
 
-        Mockito.when(apartmentRepository.findApartmentsByUser(new User())).thenReturn(posts);
-
-
         MvcResult mvcResult = mockMvc.perform(
                 get("/apartment/winners/1")
         )
                 .andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+
+        User user = new User("user","user","user","user","user","user", new Date(2000,1,1));
+        user.setId(1);
+        post.setId(1);
+        posts.add(post);
+        post.setUser(user);
+        post.setUserFk(1);
+        user.setRole("landlord");
+        user.setId(1);
+
+        Auction auction = new Auction(date, 3,"Done", post, 1,user , 1);
+
+        Mockito.when(usersRepository.findUserByIdAndRole(1,"landlord")).thenReturn(user);
+        Mockito.when(apartmentRepository.findApartmentsByUser(user)).thenReturn(posts);
+        Mockito.when(auctionRepository.findAuctionByPostFk((1))).thenReturn(auction);
+
+         mvcResult = mockMvc.perform(
+                get("/apartment/winners/1")
+        )
+                .andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+
     }
 
 

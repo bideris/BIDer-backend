@@ -140,9 +140,7 @@ public class AuctionServiceResource {
     }
 
     public Boolean validateBid(Bid bid) {
-
         return true;
-
     }
 
     @GetMapping("/won/{userId}")
@@ -154,9 +152,7 @@ public class AuctionServiceResource {
             if (userAuction.getAuction().getWinnerFk() == userId)
                 auctions.add(userAuction.getAuction());
         }
-
         return auctions;
-
     }
 
     @GetMapping("/ended/{userId}")

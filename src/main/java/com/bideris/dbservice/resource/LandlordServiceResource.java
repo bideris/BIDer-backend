@@ -112,9 +112,6 @@ public class LandlordServiceResource {
         userAuctionRepository.deleteAll(userAuctionRepository.findUserAuctionsByAuctionFk(auctionId));
         bidRepository.deleteAll(bidRepository.findBidsByAuctionFk(auctionId));
         messageRepository.deleteAll(messageRepository.findMessagesByAuctionFk(auctionId));
-        //bid
-        //message
-
         auctionRepository.delete(auction);
 
         return 0;
@@ -125,7 +122,6 @@ public class LandlordServiceResource {
     private List<Review> writeReview(@PathVariable("ownerId") final Integer ownerId,
                                @PathVariable("userid") final Integer userid,
                                @RequestBody final Review review){
-        System.out.println("startedd");
         review.setUserFFk(ownerId);//vettintojas
         review.setUserRFk(userid);
         review.setUserF(usersRepository.findUserById(ownerId));

@@ -266,7 +266,36 @@ public class AuctionServiceResourceTest {
 
     @Test
     public void getDoneWonAuctionList()throws Exception {
-        Mockito.when(userAuctionRepository.findUserAuctionsByUserFk(Mockito.anyInt())).thenReturn(new ArrayList<>());
+        Date date = new Date();
+        User user = new User("test","test","test","test","test","test", new Date(2000,1,1));
+        user.setId(1);
+        Post post = new Post(
+                new User(), 111, "test","test", "test", "test", "test",
+                "test", 1.0, 1.0, 1.0, 1.0, date, date, 1
+        );
+
+
+        List<UserAuction> auctions = new ArrayList<>();
+
+
+        Auction auction = new Auction(date, 3,"test", post, 1,user , 1);
+        auction.setId(1);
+        Auction auction2 = new Auction(date, 3,"Ended", post, 1,user , 1);
+        auction2.setId(2);
+        Auction auction3 = new Auction(date, 3,"Done", post, 1,user , 1);
+        auction3.setId(3);
+
+        UserAuction ua = new UserAuction();
+        ua.setUserFk(1);ua.setUser(user);ua.setAuctionFk(1);ua.setAuction(auction);
+        auctions.add(ua);
+        UserAuction ua2 = new UserAuction();
+        ua2.setUserFk(1);ua2.setUser(user);ua2.setAuctionFk(2);ua2.setAuction(auction2);
+        auctions.add(ua2);
+        UserAuction ua3 = new UserAuction();
+        ua3.setUserFk(1);ua3.setUser(user);ua3.setAuctionFk(3);ua3.setAuction(auction3);
+        auctions.add(ua3);
+
+        Mockito.when(userAuctionRepository.findUserAuctionsByUserFk(Mockito.anyInt())).thenReturn(auctions);
 
         MvcResult mvcResult = mockMvc.perform(
                 get("/auction/won/1")
@@ -279,10 +308,43 @@ public class AuctionServiceResourceTest {
     public void getEndedAuctionList() throws Exception{
         Mockito.when(userAuctionRepository.findUserAuctionsByUserFk(Mockito.anyInt())).thenReturn(new ArrayList<>());
 
+        Date date = new Date();
+        User user = new User("test","test","test","test","test","test", new Date(2000,1,1));
+        user.setId(1);
+        Post post = new Post(
+                new User(), 111, "test","test", "test", "test", "test",
+                "test", 1.0, 1.0, 1.0, 1.0, date, date, 1
+        );
+
+
+        List<UserAuction> auctions = new ArrayList<>();
+
+
+        Auction auction = new Auction(date, 3,"test", post, 1,user , 1);
+        auction.setId(1);
+        Auction auction2 = new Auction(date, 3,"Ended", post, 1,user , 1);
+        auction2.setId(2);
+        Auction auction3 = new Auction(date, 3,"Done", post, 1,user , 1);
+        auction3.setId(3);
+
+        UserAuction ua = new UserAuction();
+        ua.setUserFk(1);ua.setUser(user);ua.setAuctionFk(1);ua.setAuction(auction);
+        auctions.add(ua);
+        UserAuction ua2 = new UserAuction();
+        ua2.setUserFk(1);ua2.setUser(user);ua2.setAuctionFk(2);ua2.setAuction(auction2);
+        auctions.add(ua2);
+        UserAuction ua3 = new UserAuction();
+        ua3.setUserFk(1);ua3.setUser(user);ua3.setAuctionFk(3);ua3.setAuction(auction3);
+        auctions.add(ua3);
+
+        Mockito.when(userAuctionRepository.findUserAuctionsByUserFk(Mockito.anyInt())).thenReturn(auctions);
+
         MvcResult mvcResult = mockMvc.perform(
                 get("/auction/ended/1")
                         .accept(MediaType.APPLICATION_JSON)
 
         ).andExpect(status().isOk()).andReturn();
+
+
     }
 }

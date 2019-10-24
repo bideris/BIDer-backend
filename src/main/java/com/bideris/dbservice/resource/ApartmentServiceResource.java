@@ -138,7 +138,7 @@ public class ApartmentServiceResource {
 
 
         List<Post> posts = getApartmentsByLandlordId(landlordId);
-
+        System.out.println("IDDD "+posts);
         List<Auction> users = new ArrayList<>();
         Auction auction;
         for (Post post: posts) {
@@ -146,10 +146,7 @@ public class ApartmentServiceResource {
                 if(auction.getStatus().equals("Done")){
                     users.add(auction);
                 }
-
         }
-
         return users;
-
     }
 }

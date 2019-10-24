@@ -95,8 +95,7 @@ public class UserServiceResourceTest {
     @Test
     public void delete() throws Exception {
         User test = new User("test","test","test","test","test","test", new Date(2000,1,1));
-        Mockito.when(usersRepository.findUserByUserName(test.getUserName())).thenReturn(test);
-
+        Mockito.when(usersRepository.findUserByUserNameAndRole(test.getUserName(),"user")).thenReturn(test);
 
         mockMvc.perform(
                 post("/user/delete/test")
@@ -112,6 +111,64 @@ public class UserServiceResourceTest {
     @Test
     public void register() throws Exception {
 
+        User test = new User("test","test","test","test","test","test", new Date(2000,1,1));
+        Mockito.when(usersRepository.findUserByUserName(test.getUserName())).thenReturn(null);
+
+
+        String json ="{\n" +
+                "  \"userName\": \"test\",\n" +
+                "  \"email\": \"test@gamil.com\",\n" +
+                "  \"password\": \"tAAest123\",\n" +
+                "  \"password2\": \"tAAest123\",\n" +
+                "  \"firstName\": \"test\",\n" +
+                "  \"lastName\": \"test\",\n" +
+                "  \"about\": \"test\",\n" +
+                "  \"birthdate\": \"2000-01-01\"\n" +
+                "}";
+
+        MvcResult mvcResult = mockMvc.perform(
+                post("/user/register")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json)
+
+        ).andExpect(status().isOk()).andReturn();
+
+        System.out.println(String.format("resultatas %s",mvcResult.getResponse().getContentAsString()));
+
+    }
+
+    @Test
+    public void login() throws Exception{
+        User test = new User("test","test","test","test","test","test", new Date(2000,1,1));
+        Mockito.when(usersRepository.findUserByUserName(test.getUserName())).thenReturn(null);
+
+
+        String json ="{\n" +
+                "  \"userName\": \"test\",\n" +
+                "  \"email\": \"test@gamil.com\",\n" +
+                "  \"password\": \"tAAest123\",\n" +
+                "  \"password2\": \"tAAest123\",\n" +
+                "  \"firstName\": \"test\",\n" +
+                "  \"lastName\": \"test\",\n" +
+                "  \"about\": \"test\",\n" +
+                "  \"birthdate\": \"2000-01-01\"\n" +
+                "}";
+
+        MvcResult mvcResult = mockMvc.perform(
+                post("/user/register")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json)
+
+        ).andExpect(status().isOk()).andReturn();
+
+        System.out.println(String.format("resultatas %s",mvcResult.getResponse().getContentAsString()));
+
+    }
+
+    @Test
+    public void LikePost(){
         User test = new User("test","test","test","test","test","test", new Date(2000,1,1));
         Mockito.when(usersRepository.findUserByUserName(test.getUserName())).thenReturn(null);
 

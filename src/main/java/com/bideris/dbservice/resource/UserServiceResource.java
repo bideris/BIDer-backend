@@ -124,7 +124,6 @@ public class UserServiceResource {
 
         ResponseUser responseUser = validation.valid(user);
         if(responseUser.getStatus().getStatus() == 0) {
-            //saugoti sesija? daryti dalykus
             return responseUser;
         }
         return responseUser;
