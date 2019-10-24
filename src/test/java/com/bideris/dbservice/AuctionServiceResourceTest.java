@@ -237,7 +237,7 @@ public class AuctionServiceResourceTest {
         Mockito.when(bidRepository.findBidById(Mockito.anyInt())).thenReturn(new Bid());
 
         MvcResult mvcResult = mockMvc.perform(
-                get("/auction/bids/1")
+                get("/auction/bid/1")
                         .accept(MediaType.APPLICATION_JSON)
 
         ).andExpect(status().isOk()).andReturn();

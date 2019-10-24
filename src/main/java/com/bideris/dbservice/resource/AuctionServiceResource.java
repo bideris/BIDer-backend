@@ -85,7 +85,6 @@ public class AuctionServiceResource {
 
     @GetMapping("/messages/{auctionid}")
     public List<Message> getMessages(@PathVariable("auctionid") final Integer auctionid) {
-
         return messageRepository.findMessagesByAuctionFk(auctionid);
     }
 
@@ -114,7 +113,6 @@ public class AuctionServiceResource {
 
     @GetMapping("/bids/{auctionid}")
     public List<Bid> getBids(@PathVariable("auctionid") final Integer auctionid) {
-
         return bidRepository.findBidsByAuctionFk(auctionid);
     }
 
