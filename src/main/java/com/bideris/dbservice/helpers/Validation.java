@@ -1,17 +1,23 @@
 package com.bideris.dbservice.helpers;
 
+import com.bideris.dbservice.configs.AppConfig;
 import com.bideris.dbservice.model.User;
 import com.bideris.dbservice.model.UserRegistration;
 import com.bideris.dbservice.repository.UsersRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
 
 @Slf4j
+@PropertySource("file:/home/benas/KTU/BIDer-backend/src/main/resources/project.properties")
 public class Validation {
+    AppConfig  appConfig = new AppConfig();
+    String emailRegex = appConfig.getEmailRegex();
+    private String role = appConfig.getUser();
 
     private UsersRepository usersRepository;
-
-    private String role = "user";
     private StatusCodes statusCodes = new StatusCodes();
     public Validation(UsersRepository usersRepository) {
         this.usersRepository = usersRepository;
@@ -19,7 +25,10 @@ public class Validation {
 
 
     public ResponseUser valid(UserRegistration user){
-        String emailRegex = "^((\"[\\w-\\s]+\")|([\\w-]+(?:\\.[\\w-]+)*)|(\"[\\w-\\s]+\")([\\w-]+(?:\\.[\\w-]+)*))(@((?:[\\w-]+\\.)*\\w[\\w-]{0,66})\\.([a-z]{2,6}(?:\\.[a-z]{2})?)$)|(@\\[?((25[0-5]\\.|2[0-4][0-9]\\.|1[0-9]{2}\\.|[0-9]{1,2}\\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\\]?$)";
+
+
+
+        System.out.println("EMAILL " + appConfig.getEmailRegex());
         ResponseUser responseUser = new ResponseUser();
 
         if(usersRepository.findUserByUserNameAndRole(user.getUserName(),role) != null) {

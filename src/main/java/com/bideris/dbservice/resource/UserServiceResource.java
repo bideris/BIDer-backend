@@ -1,6 +1,7 @@
 package com.bideris.dbservice.resource;
 
 
+import com.bideris.dbservice.configs.AppConfig;
 import com.bideris.dbservice.helpers.ResponseUser;
 import com.bideris.dbservice.helpers.StatusCodes;
 import com.bideris.dbservice.helpers.Validation;
@@ -34,8 +35,8 @@ public class UserServiceResource {
     @Autowired
     private ApartmentRepository apartmentRepository;
 
-
-    private String role = "user";
+    AppConfig appConfig = new AppConfig();
+    private String role = appConfig.getUser();
     private StatusCodes statusCodes = new StatusCodes();
 
     @GetMapping

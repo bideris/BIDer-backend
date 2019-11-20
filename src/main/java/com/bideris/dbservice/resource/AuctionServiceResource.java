@@ -56,7 +56,6 @@ public class AuctionServiceResource {
         List<UserAuction> userAuctions = userAuctionRepository.findUserAuctionsByUserFk(userId);
         List<Auction> auctions = new ArrayList<>();
         for (UserAuction userAuction : userAuctions) {
-            System.out.println("IDDD " + userAuction.getAuction().getStatus());
             if (!userAuction.getAuction().getStatus().equals("Ended")
                     && !userAuction.getAuction().getStatus().equals("Done")  ) {
                 log.info("User Action - {}", userAuction);

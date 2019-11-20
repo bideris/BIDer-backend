@@ -106,7 +106,6 @@ public class AuctionServiceResourceTest {
 
         List<UserAuction> auctions = new ArrayList<>();
 
-
         Auction auction = new Auction(date, 3,"test", post, 1,user , 1);
         auction.setId(1);
         Auction auction2 = new Auction(date, 3,"Ended", post, 1,user , 1);

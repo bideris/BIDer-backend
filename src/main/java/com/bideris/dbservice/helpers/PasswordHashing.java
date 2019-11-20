@@ -1,6 +1,8 @@
 package com.bideris.dbservice.helpers;
 
 
+import com.bideris.dbservice.configs.AppConfig;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -27,6 +29,7 @@ public class PasswordHashing {
         }
         return null;
     }
+    AppConfig appConfig = new AppConfig();
 
     private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
     private static String bytesToHex(byte[] bytes) {
