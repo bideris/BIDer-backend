@@ -36,7 +36,6 @@ public class ApartmentServiceResource {
 
     @GetMapping("/{id}")
     public ResponseApartment getApartment(@PathVariable("id") final Integer id){
-        System.out.println("KVIETEEEE" + id.toString());
         ResponseApartment response = new ResponseApartment();
         Post post = getApartmentById(id);
         if(post != null){
@@ -62,22 +61,16 @@ public class ApartmentServiceResource {
     @GetMapping("/all/{landlordId}")
     public ResponseApartment getApartments(@PathVariable("landlordId") final Integer landlordId){
 
-
         ResponseApartment response = new ResponseApartment();
         List<Post> posts = getApartmentsByLandlordId(landlordId);
         if(posts != null){
             response.setPosts(posts);
             response.setStatus(statusCodes.getStatuse(0));
-        }else
-        {
-            System.out.println("Nu gi null");
+        }else {
             response.setStatus(statusCodes.getStatuse(12));
         }
 
-
-
         return response;
-
     }
 
     private List<Post> getApartmentsByLandlordId(Integer id) {

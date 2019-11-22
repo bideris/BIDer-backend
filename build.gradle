@@ -20,6 +20,7 @@ sourceCompatibility = '1.8'
 
 
 apply plugin: "war"
+apply plugin: "pmd"
 
 repositories {
 	mavenCentral()
@@ -37,3 +38,7 @@ dependencies {
 	compile 'javax.mail:mail:1.4.7'
 }
 
+pmd{
+	ignoreFailures = true
+	ruleSetConfig = rootProject.resources.text.fromFile('etc/pmd/rulesets.xml')
+}

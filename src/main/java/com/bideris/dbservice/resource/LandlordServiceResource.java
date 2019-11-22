@@ -1,5 +1,6 @@
 package com.bideris.dbservice.resource;
 
+import com.bideris.dbservice.configs.AppConfig;
 import com.bideris.dbservice.helpers.ResponseUser;
 import com.bideris.dbservice.helpers.StatusCodes;
 import com.bideris.dbservice.model.*;
@@ -34,8 +35,8 @@ public class LandlordServiceResource {
 
     @Autowired
     MessageRepository messageRepository;
-
-    private String role = "landlord";
+    AppConfig appConfig = new AppConfig();
+    private String role = appConfig.getLandlord();
     private StatusCodes statusCodes = new StatusCodes();
 
     public LandlordServiceResource() {
